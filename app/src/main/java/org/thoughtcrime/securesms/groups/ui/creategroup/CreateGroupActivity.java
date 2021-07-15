@@ -29,7 +29,7 @@ import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.Stopwatch;
-import org.thoughtcrime.securesms.util.TextSecurePreferences;
+import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.concurrent.SimpleTask;
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog;
@@ -56,8 +56,8 @@ public class CreateGroupActivity extends ContactSelectionActivity {
     intent.putExtra(ContactSelectionListFragment.REFRESHABLE, false);
     intent.putExtra(ContactSelectionActivity.EXTRA_LAYOUT_RES_ID, R.layout.create_group_activity);
 
-    int displayMode = TextSecurePreferences.isSmsEnabled(context) ? ContactsCursorLoader.DisplayMode.FLAG_SMS | ContactsCursorLoader.DisplayMode.FLAG_PUSH
-                                                                  : ContactsCursorLoader.DisplayMode.FLAG_PUSH;
+    int displayMode = Util.isDefaultSmsProvider(context) ? ContactsCursorLoader.DisplayMode.FLAG_SMS | ContactsCursorLoader.DisplayMode.FLAG_PUSH
+                                                         : ContactsCursorLoader.DisplayMode.FLAG_PUSH;
 
     intent.putExtra(ContactSelectionListFragment.DISPLAY_MODE, displayMode);
     intent.putExtra(ContactSelectionListFragment.SELECTION_LIMITS, FeatureFlags.groupLimits().excludingSelf());
@@ -99,7 +99,7 @@ public class CreateGroupActivity extends ContactSelectionActivity {
   @Override
   public boolean onBeforeContactSelected(Optional<RecipientId> recipientId, String number) {
     if (contactsFragment.hasQueryFilter()) {
-      getToolbar().clear();
+      getContactFilterView().clear();
     }
 
     shrinkSkip();
@@ -110,11 +110,21 @@ public class CreateGroupActivity extends ContactSelectionActivity {
   @Override
   public void onContactDeselected(Optional<RecipientId> recipientId, String number) {
     if (contactsFragment.hasQueryFilter()) {
-      getToolbar().clear();
+      getContactFilterView().clear();
     }
 
     if (contactsFragment.getSelectedContactsCount() == 0) {
       extendSkip();
+    }
+  }
+
+  @Override
+  public void onSelectionChanged() {
+    int selectedContactsCount = contactsFragment.getTotalMemberCount();
+    if (selectedContactsCount == 0) {
+      getToolbar().setTitle(getString(R.string.CreateGroupActivity__select_members));
+    } else {
+      getToolbar().setTitle(getResources().getQuantityString(R.plurals.CreateGroupActivity__d_members, selectedContactsCount, selectedContactsCount));
     }
   }
 

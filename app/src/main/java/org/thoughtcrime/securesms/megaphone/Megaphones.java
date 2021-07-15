@@ -12,8 +12,8 @@ import com.annimon.stream.Stream;
 
 import org.signal.core.util.TranslationDetection;
 import org.signal.core.util.logging.Log;
-import org.thoughtcrime.securesms.ApplicationPreferencesActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.conversationlist.ConversationListFragment;
 import org.thoughtcrime.securesms.database.model.MegaphoneRecord;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
@@ -29,10 +29,11 @@ import org.thoughtcrime.securesms.profiles.ProfileName;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.CommunicationActions;
 import org.thoughtcrime.securesms.util.FeatureFlags;
-import org.thoughtcrime.securesms.util.PopulationFeatureFlags;
+import org.thoughtcrime.securesms.util.LocaleFeatureFlags;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.VersionTracker;
 import org.thoughtcrime.securesms.util.dynamiclanguage.DynamicLanguageContextWrapper;
+import org.thoughtcrime.securesms.wallpaper.ChatWallpaperActivity;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -103,6 +104,7 @@ public final class Megaphones {
       put(Event.GROUP_CALLING, shouldShowGroupCallingMegaphone() ? ALWAYS : NEVER);
       put(Event.ONBOARDING, shouldShowOnboardingMegaphone(context) ? ALWAYS : NEVER);
       put(Event.NOTIFICATIONS, shouldShowNotificationsMegaphone(context) ? RecurringSchedule.every(TimeUnit.DAYS.toMillis(30)) : NEVER);
+      put(Event.CHAT_COLORS, ALWAYS);
     }};
   }
 
@@ -130,6 +132,8 @@ public final class Megaphones {
         return buildOnboardingMegaphone();
       case NOTIFICATIONS:
         return buildNotificationsMegaphone(context);
+      case CHAT_COLORS:
+        return buildChatColorsMegaphone(context);
       default:
         throw new IllegalArgumentException("Event not handled!");
     }
@@ -293,13 +297,26 @@ public final class Megaphones {
                             intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
                             controller.onMegaphoneNavigationRequested(intent);
                           } else {
-                            Intent intent = new Intent(context, ApplicationPreferencesActivity.class);
-                            intent.putExtra(ApplicationPreferencesActivity.LAUNCH_TO_NOTIFICATIONS_FRAGMENT, true);
-                            controller.onMegaphoneNavigationRequested(intent);
+                            controller.onMegaphoneNavigationRequested(AppSettingsActivity.notifications(context));
                           }
                         })
                         .setSecondaryButton(R.string.NotificationsMegaphone_not_now, (megaphone, controller) -> controller.onMegaphoneSnooze(Event.NOTIFICATIONS))
                         .setPriority(Megaphone.Priority.DEFAULT)
+                        .build();
+  }
+
+  private static @NonNull Megaphone buildChatColorsMegaphone(@NonNull Context context) {
+    return new Megaphone.Builder(Event.CHAT_COLORS, Megaphone.Style.BASIC)
+                        .setTitle(R.string.ChatColorsMegaphone__new_chat_colors)
+                        .setBody(R.string.ChatColorsMegaphone__we_switched_up_chat_colors)
+                        .setLottie(R.raw.color_bubble_64)
+                        .setActionButton(R.string.ChatColorsMegaphone__appearance, (megaphone, listener) -> {
+                          listener.onMegaphoneNavigationRequested(ChatWallpaperActivity.createIntent(context));
+                          listener.onMegaphoneCompleted(Event.CHAT_COLORS);
+                        })
+                        .setSecondaryButton(R.string.ChatColorsMegaphone__not_now, (megaphone, listener) -> {
+                          listener.onMegaphoneCompleted(Event.CHAT_COLORS);
+                        })
                         .build();
   }
 
@@ -308,11 +325,11 @@ public final class Megaphones {
   }
 
   private static boolean shouldShowResearchMegaphone(@NonNull Context context) {
-    return VersionTracker.getDaysSinceFirstInstalled(context) > 7 && PopulationFeatureFlags.isInResearchMegaphone();
+    return VersionTracker.getDaysSinceFirstInstalled(context) > 7 && LocaleFeatureFlags.isInResearchMegaphone();
   }
 
   private static boolean shouldShowDonateMegaphone(@NonNull Context context) {
-    return VersionTracker.getDaysSinceFirstInstalled(context) > 7 && PopulationFeatureFlags.isInDonateMegaphone();
+    return VersionTracker.getDaysSinceFirstInstalled(context) > 7 && LocaleFeatureFlags.isInDonateMegaphone();
   }
 
   private static boolean shouldShowLinkPreviewsMegaphone(@NonNull Context context) {
@@ -328,8 +345,8 @@ public final class Megaphones {
   }
 
   private static boolean shouldShowNotificationsMegaphone(@NonNull Context context) {
-    boolean shouldShow = !TextSecurePreferences.isNotificationsEnabled(context)       ||
-                         !NotificationChannels.isMessageChannelEnabled(context)       ||
+    boolean shouldShow = !SignalStore.settings().isMessageNotificationsEnabled() ||
+                         !NotificationChannels.isMessageChannelEnabled(context) ||
                          !NotificationChannels.isMessagesChannelGroupEnabled(context) ||
                          !NotificationChannels.areNotificationsEnabled(context);
     if (shouldShow) {
@@ -357,7 +374,8 @@ public final class Megaphones {
     DONATE("donate"),
     GROUP_CALLING("group_calling"),
     ONBOARDING("onboarding"),
-    NOTIFICATIONS("notifications");
+    NOTIFICATIONS("notifications"),
+    CHAT_COLORS("chat_colors");
 
     private final String key;
 

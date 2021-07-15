@@ -29,6 +29,8 @@ public final class DatabaseObserver {
   private final Map<Long, Set<Observer>> verboseConversationObservers;
   private final Map<UUID, Set<Observer>> paymentObservers;
   private final Set<Observer>            allPaymentsObservers;
+  private final Set<Observer>            chatColorsObservers;
+  private final Set<Observer>            stickerPackObservers;
 
   public DatabaseObserver(Application application) {
     this.application                  = application;
@@ -38,6 +40,8 @@ public final class DatabaseObserver {
     this.verboseConversationObservers = new HashMap<>();
     this.paymentObservers             = new HashMap<>();
     this.allPaymentsObservers         = new HashSet<>();
+    this.chatColorsObservers          = new HashSet<>();
+    this.stickerPackObservers         = new HashSet<>();
   }
 
   public void registerConversationListObserver(@NonNull Observer listener) {
@@ -70,12 +74,26 @@ public final class DatabaseObserver {
     });
   }
 
+  public void registerChatColorsObserver(@NonNull Observer listener) {
+    executor.execute(() -> {
+      chatColorsObservers.add(listener);
+    });
+  }
+
+  public void registerStickerPackObserver(@NonNull Observer listener) {
+    executor.execute(() -> {
+      stickerPackObservers.add(listener);
+    });
+  }
+
   public void unregisterObserver(@NonNull Observer listener) {
     executor.execute(() -> {
       conversationListObservers.remove(listener);
       unregisterMapped(conversationObservers, listener);
       unregisterMapped(verboseConversationObservers, listener);
       unregisterMapped(paymentObservers, listener);
+      chatColorsObservers.remove(listener);
+      stickerPackObservers.remove(listener);
     });
   }
 
@@ -103,6 +121,18 @@ public final class DatabaseObserver {
     application.getContentResolver().notifyChange(DatabaseContentProviders.Conversation.getVerboseUriForThread(threadId), null);
   }
 
+  public void notifyVerboseConversationListeners(Set<Long> threadIds) {
+    executor.execute(() -> {
+      for (long threadId : threadIds) {
+        notifyMapped(verboseConversationObservers, threadId);
+      }
+    });
+
+    for (long threadId : threadIds) {
+      application.getContentResolver().notifyChange(DatabaseContentProviders.Conversation.getVerboseUriForThread(threadId), null);
+    }
+  }
+
   public void notifyVerboseConversationListeners(long threadId) {
     executor.execute(() -> {
       notifyMapped(verboseConversationObservers, threadId);
@@ -128,6 +158,20 @@ public final class DatabaseObserver {
   public void notifyAllPaymentsListeners() {
     executor.execute(() -> {
       notifySet(allPaymentsObservers);
+    });
+  }
+
+  public void notifyChatColorsListeners() {
+    executor.execute(() -> {
+      for (Observer chatColorsObserver : chatColorsObservers) {
+        chatColorsObserver.onChanged();
+      }
+    });
+  }
+
+  public void notifyStickerPackObservers() {
+    executor.execute(() -> {
+      notifySet(stickerPackObservers);
     });
   }
 

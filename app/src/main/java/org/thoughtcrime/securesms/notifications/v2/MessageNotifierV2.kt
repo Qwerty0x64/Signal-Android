@@ -14,9 +14,10 @@ import me.leolin.shortcutbadger.ShortcutBadger
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.DatabaseFactory
+import org.thoughtcrime.securesms.database.MessageDatabase
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.messages.IncomingMessageObserver
-import org.thoughtcrime.securesms.notifications.DefaultMessageNotifier
 import org.thoughtcrime.securesms.notifications.MessageNotifier
 import org.thoughtcrime.securesms.notifications.MessageNotifier.ReminderReceiver
 import org.thoughtcrime.securesms.notifications.NotificationCancellationHelper
@@ -26,7 +27,6 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.service.KeyCachingService
 import org.thoughtcrime.securesms.util.BubbleUtil.BubbleState
 import org.thoughtcrime.securesms.util.ServiceUtil
-import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.webrtc.CallNotificationBuilder
 import org.whispersystems.signalservice.internal.util.Util
 import java.util.concurrent.ConcurrentHashMap
@@ -46,7 +46,8 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
   @Volatile private var lastAudibleNotification: Long = -1
   @Volatile private var lastScheduledReminder: Long = 0
   @Volatile private var previousLockedStatus: Boolean = KeyCachingService.isLocked(context)
-  @Volatile private var previousPrivacyPreference: NotificationPrivacyPreference = TextSecurePreferences.getNotificationPrivacy(context)
+  @Volatile private var previousPrivacyPreference: NotificationPrivacyPreference = SignalStore.settings().messageNotificationsPrivacy
+  @Volatile private var previousState: NotificationStateV2 = NotificationStateV2.EMPTY
 
   private val threadReminders: MutableMap<Long, Reminder> = ConcurrentHashMap()
   private val stickyThreads: MutableMap<Long, StickyThread> = mutableMapOf()
@@ -74,6 +75,10 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
     NotificationFactory.notifyMessageDeliveryFailed(context, recipient, threadId, visibleThread)
   }
 
+  override fun notifyProofRequired(context: Context, recipient: Recipient, threadId: Long) {
+    NotificationFactory.notifyProofRequired(context, recipient, threadId, visibleThread)
+  }
+
   override fun cancelDelayedNotifications() {
     executor.cancel()
   }
@@ -83,7 +88,7 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
   }
 
   override fun updateNotification(context: Context, threadId: Long) {
-    if (System.currentTimeMillis() - lastDesktopActivityTimestamp < DefaultMessageNotifier.DESKTOP_ACTIVITY_PERIOD) {
+    if (System.currentTimeMillis() - lastDesktopActivityTimestamp < DESKTOP_ACTIVITY_PERIOD) {
       Log.i(TAG, "Scheduling delayed notification...")
       executor.enqueue(context, threadId)
     } else {
@@ -110,12 +115,12 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
     reminderCount: Int,
     defaultBubbleState: BubbleState
   ) {
-    if (!TextSecurePreferences.isNotificationsEnabled(context)) {
+    if (!SignalStore.settings().isMessageNotificationsEnabled) {
       return
     }
 
     val currentLockStatus: Boolean = KeyCachingService.isLocked(context)
-    val currentPrivacyPreference: NotificationPrivacyPreference = TextSecurePreferences.getNotificationPrivacy(context)
+    val currentPrivacyPreference: NotificationPrivacyPreference = SignalStore.settings().messageNotificationsPrivacy
     val notificationConfigurationChanged: Boolean = currentLockStatus != previousLockedStatus || currentPrivacyPreference != previousPrivacyPreference
     previousLockedStatus = currentLockStatus
     previousPrivacyPreference = currentPrivacyPreference
@@ -125,8 +130,25 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
     }
 
     Log.internal().i(TAG, "sticky thread: $stickyThreads")
-    val state: NotificationStateV2 = NotificationStateProvider.constructNotificationState(context, stickyThreads)
+    var state: NotificationStateV2 = NotificationStateProvider.constructNotificationState(context, stickyThreads)
     Log.internal().i(TAG, "state: $state")
+
+    val displayedNotifications: Set<Int>? = ServiceUtil.getNotificationManager(context).getDisplayedNotificationIds().getOrNull()
+    if (displayedNotifications != null) {
+      val cleanedUpThreadIds: MutableSet<Long> = mutableSetOf()
+      state.conversations.filterNot { it.hasNewNotifications() || displayedNotifications.contains(it.notificationId) }
+        .forEach { conversation ->
+          cleanedUpThreadIds += conversation.threadId
+          conversation.notificationItems.forEach { item ->
+            val messageDatabase: MessageDatabase = if (item.isMms) DatabaseFactory.getMmsDatabase(context) else DatabaseFactory.getSmsDatabase(context)
+            messageDatabase.markAsNotified(item.id)
+          }
+        }
+      if (cleanedUpThreadIds.isNotEmpty()) {
+        Log.i(TAG, "Cleaned up ${cleanedUpThreadIds.size} thread(s) with dangling notifications")
+        state = NotificationStateV2(state.conversations.filterNot { cleanedUpThreadIds.contains(it.threadId) })
+      }
+    }
 
     val retainStickyThreadIds: Set<Long> = state.getThreadsWithMostRecentNotificationFromSelf()
     stickyThreads.keys.retainAll { retainStickyThreadIds.contains(it) }
@@ -149,9 +171,11 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
       defaultBubbleState = defaultBubbleState,
       lastAudibleNotification = lastAudibleNotification,
       notificationConfigurationChanged = notificationConfigurationChanged,
-      alertOverrides = alertOverrides
+      alertOverrides = alertOverrides,
+      previousState = previousState
     )
 
+    previousState = state
     lastAudibleNotification = System.currentTimeMillis()
 
     updateReminderTimestamps(context, alertOverrides, threadsThatAlerted)
@@ -186,7 +210,7 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
   }
 
   private fun updateReminderTimestamps(context: Context, alertOverrides: Set<Long>, threadsThatAlerted: Set<Long>) {
-    if (TextSecurePreferences.getRepeatAlertsCount(context) == 0) {
+    if (SignalStore.settings().messageNotificationsRepeatAlerts == 0) {
       return
     }
 
@@ -196,7 +220,7 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
       val (id: Long, reminder: Reminder) = entry
       if (alertOverrides.contains(id)) {
         val notifyCount: Int = reminder.count + 1
-        if (notifyCount >= TextSecurePreferences.getRepeatAlertsCount(context)) {
+        if (notifyCount >= SignalStore.settings().messageNotificationsRepeatAlerts) {
           iterator.remove()
         } else {
           entry.setValue(Reminder(lastAudibleNotification, notifyCount))
@@ -238,8 +262,14 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
   }
 
   companion object {
-    private val TAG = Log.tag(MessageNotifierV2::class.java)
-    private val REMINDER_TIMEOUT = TimeUnit.MINUTES.toMillis(2)
+    val TAG: String = Log.tag(MessageNotifierV2::class.java)
+
+    private val REMINDER_TIMEOUT: Long = TimeUnit.MINUTES.toMillis(2)
+    val MIN_AUDIBLE_PERIOD_MILLIS = TimeUnit.SECONDS.toMillis(2)
+    val DESKTOP_ACTIVITY_PERIOD = TimeUnit.MINUTES.toMillis(1)
+
+    const val EXTRA_REMOTE_REPLY = "extra_remote_reply"
+    const val NOTIFICATION_GROUP = "messages"
 
     private fun updateBadge(context: Context, count: Int) {
       try {
@@ -250,34 +280,49 @@ class MessageNotifierV2(context: Application) : MessageNotifier {
     }
   }
 
-  private fun NotificationManager.cancelOrphanedNotifications(context: Context, state: NotificationStateV2, stickyNotifications: Set<Int>) {
-    if (Build.VERSION.SDK_INT < 23) {
-      return
-    }
-
-    try {
-      for (notification: StatusBarNotification in activeNotifications) {
-        if (notification.id != NotificationIds.MESSAGE_SUMMARY &&
-          notification.id != KeyCachingService.SERVICE_RUNNING_ID &&
-          notification.id != IncomingMessageObserver.FOREGROUND_ID &&
-          notification.id != NotificationIds.PENDING_MESSAGES &&
-          !CallNotificationBuilder.isWebRtcNotification(notification.id) &&
-          !stickyNotifications.contains(notification.id)
-        ) {
-          if (!state.notificationIds.contains(notification.id)) {
-            Log.d(TAG, "Cancelling orphaned notification: ${notification.id}")
-            NotificationCancellationHelper.cancel(context, notification.id)
-          }
-        }
-      }
-      NotificationCancellationHelper.cancelMessageSummaryIfSoleNotification(context)
-    } catch (e: Throwable) {
-      Log.w(TAG, e)
-    }
-  }
-
   data class StickyThread(val threadId: Long, val notificationId: Int, val earliestTimestamp: Long)
   private data class Reminder(val lastNotified: Long, val count: Int = 0)
+}
+
+private fun StatusBarNotification.isMessageNotification(): Boolean {
+  return id != NotificationIds.MESSAGE_SUMMARY &&
+    id != KeyCachingService.SERVICE_RUNNING_ID &&
+    id != IncomingMessageObserver.FOREGROUND_ID &&
+    id != NotificationIds.PENDING_MESSAGES &&
+    !CallNotificationBuilder.isWebRtcNotification(id)
+}
+
+private fun NotificationManager.getDisplayedNotificationIds(): Result<Set<Int>> {
+  if (Build.VERSION.SDK_INT < 24) {
+    return Result.failure(UnsupportedOperationException("SDK level too low"))
+  }
+
+  return try {
+    Result.success(activeNotifications.filter { it.isMessageNotification() }.map { it.id }.toSet())
+  } catch (e: Throwable) {
+    Log.w(MessageNotifierV2.TAG, e)
+    Result.failure(e)
+  }
+}
+
+private fun NotificationManager.cancelOrphanedNotifications(context: Context, state: NotificationStateV2, stickyNotifications: Set<Int>) {
+  if (Build.VERSION.SDK_INT < 24) {
+    return
+  }
+
+  try {
+    activeNotifications.filter { it.isMessageNotification() && !stickyNotifications.contains(it.id) }
+      .map { it.id }
+      .filterNot { state.notificationIds.contains(it) }
+      .forEach { id ->
+        Log.d(MessageNotifierV2.TAG, "Cancelling orphaned notification: $id")
+        NotificationCancellationHelper.cancel(context, id)
+      }
+
+    NotificationCancellationHelper.cancelMessageSummaryIfSoleNotification(context)
+  } catch (e: Throwable) {
+    Log.w(MessageNotifierV2.TAG, e)
+  }
 }
 
 private class CancelableExecutor {

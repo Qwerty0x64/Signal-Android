@@ -20,6 +20,7 @@ import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatch;
 import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatchList;
 import org.thoughtcrime.securesms.database.documents.NetworkFailure;
 import org.thoughtcrime.securesms.database.helpers.SQLCipherOpenHelper;
+import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.ReactionRecord;
 import org.thoughtcrime.securesms.database.model.SmsMessageRecord;
@@ -34,6 +35,7 @@ import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.revealable.ViewOnceExpirationInfo;
 import org.thoughtcrime.securesms.sms.IncomingTextMessage;
 import org.thoughtcrime.securesms.sms.OutgoingTextMessage;
+import org.thoughtcrime.securesms.util.CursorUtil;
 import org.thoughtcrime.securesms.util.JsonUtils;
 import org.thoughtcrime.securesms.util.SqlUtil;
 import org.thoughtcrime.securesms.util.Util;
@@ -76,6 +78,7 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract int getMessageCountForThread(long threadId);
   public abstract int getMessageCountForThread(long threadId, long beforeTime);
   abstract int getMessageCountForThreadSummary(long threadId);
+  public abstract boolean hasMeaningfulMessage(long threadId);
   public abstract Optional<MmsNotificationInfo> getNotification(long messageId);
 
   public abstract Cursor getExpirationStartedMessages();
@@ -84,11 +87,13 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract Cursor getMessageCursor(long messageId);
   public abstract OutgoingMediaMessage getOutgoingMessage(long messageId) throws MmsException, NoSuchMessageException;
   public abstract MessageRecord getMessageRecord(long messageId) throws NoSuchMessageException;
+  public abstract @Nullable MessageRecord getMessageRecordOrNull(long messageId);
   public abstract Cursor getVerboseMessageCursor(long messageId);
   public abstract boolean hasReceivedAnyCallsSince(long threadId, long timestamp);
   public abstract @Nullable ViewOnceExpirationInfo getNearestExpiringViewOnceMessage();
   public abstract boolean isSent(long messageId);
   public abstract List<MessageRecord> getProfileChangeDetailsRecords(long threadId, long afterTimestamp);
+  public abstract Set<Long> getAllRateLimitedMessageIds();
 
   public abstract void markExpireStarted(long messageId);
   public abstract void markExpireStarted(long messageId, long startTime);
@@ -101,6 +106,8 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract void markAsInsecure(long id);
   public abstract void markAsPush(long id);
   public abstract void markAsForcedSms(long id);
+  public abstract void markAsRateLimited(long id);
+  public abstract void clearRateLimitStatus(Collection<Long> ids);
   public abstract void markAsDecryptFailed(long id);
   public abstract void markAsDecryptDuplicate(long id);
   public abstract void markAsNoSession(long id);
@@ -125,9 +132,10 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract List<MarkedMessageInfo> setEntireThreadRead(long threadId);
   public abstract List<MarkedMessageInfo> setMessagesReadSince(long threadId, long timestamp);
   public abstract List<MarkedMessageInfo> setAllMessagesRead();
-  public abstract Pair<Long, Long> updateBundleMessageBody(long messageId, String body);
+  public abstract InsertResult updateBundleMessageBody(long messageId, String body);
   public abstract @NonNull List<MarkedMessageInfo> getViewedIncomingMessages(long threadId);
   public abstract @Nullable MarkedMessageInfo setIncomingMessageViewed(long messageId);
+  public abstract @NonNull List<MarkedMessageInfo> setIncomingMessagesViewed(@NonNull List<Long> messageIds);
 
   public abstract void addFailures(long messageId, List<NetworkFailure> failure);
   public abstract void removeFailure(long messageId, NetworkFailure failure);
@@ -152,7 +160,8 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract Optional<InsertResult> insertMessageInbox(IncomingMediaMessage retrieved, String contentLocation, long threadId) throws MmsException;
   public abstract Pair<Long, Long> insertMessageInbox(@NonNull NotificationInd notification, int subscriptionId);
   public abstract Optional<InsertResult> insertSecureDecryptedMessageInbox(IncomingMediaMessage retrieved, long threadId) throws MmsException;
-  public abstract @NonNull InsertResult insertDecryptionFailedMessage(@NonNull RecipientId recipientId, long senderDeviceId, long sentTimestamp);
+  public abstract @NonNull InsertResult insertChatSessionRefreshedMessage(@NonNull RecipientId recipientId, long senderDeviceId, long sentTimestamp);
+  public abstract void insertBadDecryptMessage(@NonNull RecipientId recipientId, int senderDevice, long sentTimestamp, long receivedTimestamp, long threadId);
   public abstract long insertMessageOutbox(long threadId, OutgoingTextMessage message, boolean forceSms, long date, InsertListener insertListener);
   public abstract long insertMessageOutbox(@NonNull OutgoingMediaMessage message, long threadId, boolean forceSms, @Nullable SmsDatabase.InsertListener insertListener) throws MmsException;
   public abstract long insertMessageOutbox(@NonNull OutgoingMediaMessage message, long threadId, boolean forceSms, int defaultReceiptStatus, @Nullable SmsDatabase.InsertListener insertListener) throws MmsException;
@@ -319,6 +328,8 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
       setReactions(db, messageId, updatedList);
 
       db.setTransactionSuccessful();
+    } catch (NoSuchMessageException e) {
+      Log.w(TAG, "No message for provided id", e);
     } finally {
       db.endTransaction();
     }
@@ -338,6 +349,8 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
       setReactions(db, messageId, updatedList);
 
       db.setTransactionSuccessful();
+    } catch (NoSuchMessageException e) {
+      Log.w(TAG, "No message for provided id", e);
     } finally {
       db.endTransaction();
     }
@@ -393,6 +406,25 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
     } catch (IOException e) {
       Log.w(TAG, e);
     }
+  }
+
+  public @NonNull List<ReportSpamData> getReportSpamMessageServerGuids(long threadId, long timestamp) {
+    SQLiteDatabase db    = databaseHelper.getReadableDatabase();
+    String         query = THREAD_ID + " = ? AND " + getDateReceivedColumnName() + " <= ?";
+    String[]       args  = SqlUtil.buildArgs(threadId, timestamp);
+
+    List<ReportSpamData> data = new ArrayList<>();
+    try (Cursor cursor = db.query(getTableName(), new String[] { RECIPIENT_ID, SERVER_GUID, getDateReceivedColumnName() }, query, args, null, null, getDateReceivedColumnName() + " DESC", "3")) {
+      while (cursor.moveToNext()) {
+        RecipientId id         = RecipientId.from(CursorUtil.requireLong(cursor, RECIPIENT_ID));
+        String      serverGuid = CursorUtil.requireString(cursor, SERVER_GUID);
+        long        dateReceived = CursorUtil.requireLong(cursor, getDateReceivedColumnName());
+        if (!Util.isEmpty(serverGuid)) {
+          data.add(new ReportSpamData(id, serverGuid, dateReceived));
+        }
+      }
+    }
+    return data;
   }
 
   protected static List<ReactionRecord> parseReactions(@NonNull Cursor cursor) {
@@ -543,14 +575,15 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
     return Optional.absent();
   }
 
-  private void setReactions(@NonNull SQLiteDatabase db, long messageId, @NonNull ReactionList reactionList) {
-    ContentValues values       = new ContentValues(1);
+  private void setReactions(@NonNull SQLiteDatabase db, long messageId, @NonNull ReactionList reactionList) throws NoSuchMessageException {
+    ContentValues values       = new ContentValues();
+    boolean       isOutgoing   = getMessageRecord(messageId).isOutgoing();
     boolean       hasReactions = reactionList.getReactionsCount() != 0;
 
     values.put(REACTIONS, reactionList.getReactionsList().isEmpty() ? null : reactionList.toByteArray());
     values.put(REACTIONS_UNREAD, hasReactions ? 1 : 0);
 
-    if (hasReactions) {
+    if (isOutgoing && hasReactions) {
       values.put(NOTIFIED, 0);
     }
 
@@ -650,11 +683,13 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
     private final long           threadId;
     private final SyncMessageId  syncMessageId;
+    private final MessageId      messageId;
     private final ExpirationInfo expirationInfo;
 
-    public MarkedMessageInfo(long threadId, SyncMessageId syncMessageId, ExpirationInfo expirationInfo) {
+    public MarkedMessageInfo(long threadId, @NonNull SyncMessageId syncMessageId, @NonNull MessageId messageId, @Nullable ExpirationInfo expirationInfo) {
       this.threadId       = threadId;
       this.syncMessageId  = syncMessageId;
+      this.messageId      = messageId;
       this.expirationInfo = expirationInfo;
     }
 
@@ -662,11 +697,15 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
       return threadId;
     }
 
-    public SyncMessageId getSyncMessageId() {
+    public @NonNull SyncMessageId getSyncMessageId() {
       return syncMessageId;
     }
 
-    public ExpirationInfo getExpirationInfo() {
+    public @NonNull MessageId getMessageId() {
+      return messageId;
+    }
+
+    public @Nullable ExpirationInfo getExpirationInfo() {
       return expirationInfo;
     }
   }
@@ -760,5 +799,29 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
     MessageRecord getNext();
     MessageRecord getCurrent();
     void close();
+  }
+
+  public static class ReportSpamData {
+    private final RecipientId recipientId;
+    private final String      serverGuid;
+    private final long        dateReceived;
+
+    public ReportSpamData(RecipientId recipientId, String serverGuid, long dateReceived) {
+      this.recipientId  = recipientId;
+      this.serverGuid   = serverGuid;
+      this.dateReceived = dateReceived;
+    }
+
+    public @NonNull RecipientId getRecipientId() {
+      return recipientId;
+    }
+
+    public @NonNull String getServerGuid() {
+      return serverGuid;
+    }
+
+    public long getDateReceived() {
+      return dateReceived;
+    }
   }
 }

@@ -27,6 +27,8 @@ import androidx.multidex.MultiDexApplication;
 
 import com.google.android.gms.security.ProviderInstaller;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.conscrypt.Conscrypt;
 import org.signal.aesgcmprovider.AesGcmProvider;
 import org.signal.core.util.concurrent.SignalExecutors;
@@ -40,8 +42,11 @@ import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.helpers.SQLCipherOpenHelper;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencyProvider;
+import org.thoughtcrime.securesms.emoji.EmojiSource;
 import org.thoughtcrime.securesms.gcm.FcmJobService;
 import org.thoughtcrime.securesms.jobs.CreateSignedPreKeyJob;
+import org.thoughtcrime.securesms.jobs.DownloadLatestEmojiDataJob;
+import org.thoughtcrime.securesms.jobs.EmojiSearchIndexDownloadJob;
 import org.thoughtcrime.securesms.jobs.FcmRefreshJob;
 import org.thoughtcrime.securesms.jobs.GroupV1MigrationJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceContactUpdateJob;
@@ -56,11 +61,10 @@ import org.thoughtcrime.securesms.migrations.ApplicationMigrations;
 import org.thoughtcrime.securesms.notifications.NotificationChannels;
 import org.thoughtcrime.securesms.providers.BlobProvider;
 import org.thoughtcrime.securesms.push.SignalServiceNetworkAccess;
+import org.thoughtcrime.securesms.ratelimit.RateLimitUtil;
 import org.thoughtcrime.securesms.registration.RegistrationUtil;
-import org.thoughtcrime.securesms.revealable.ViewOnceMessageManager;
 import org.thoughtcrime.securesms.ringrtc.RingRtcLogger;
 import org.thoughtcrime.securesms.service.DirectoryRefreshListener;
-import org.thoughtcrime.securesms.service.ExpiringMessageManager;
 import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.service.LocalBackupListener;
 import org.thoughtcrime.securesms.service.RotateSenderCertificateListener;
@@ -69,6 +73,7 @@ import org.thoughtcrime.securesms.service.UpdateApkRefreshListener;
 import org.thoughtcrime.securesms.storage.StorageSyncHelper;
 import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
+import org.thoughtcrime.securesms.util.ByteUnit;
 import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.SignalUncaughtExceptionHandler;
@@ -82,6 +87,9 @@ import org.whispersystems.libsignal.logging.SignalProtocolLoggerProvider;
 
 import java.security.Security;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Will be called once when the TextSecure process is created.
@@ -116,11 +124,15 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
     AppStartup.getInstance().addBlocking("security-provider", this::initializeSecurityProvider)
                             .addBlocking("logging", () -> {
-                                initializeLogging();
-                                Log.i(TAG, "onCreate()");
+                              initializeLogging();
+                              Log.i(TAG, "onCreate()");
                             })
                             .addBlocking("crash-handling", this::initializeCrashHandling)
-                            .addBlocking("eat-db", () -> DatabaseFactory.getInstance(this))
+                            .addBlocking("sqlcipher-init", () -> SQLiteDatabase.loadLibs(this))
+                            .addBlocking("rx-init", () -> {
+                              RxJavaPlugins.setInitIoSchedulerHandler(schedulerSupplier -> Schedulers.from(SignalExecutors.BOUNDED_IO, true, false));
+                              RxJavaPlugins.setInitComputationSchedulerHandler(schedulerSupplier -> Schedulers.from(SignalExecutors.BOUNDED, true, false));
+                            })
                             .addBlocking("app-dependencies", this::initializeAppDependencies)
                             .addBlocking("notification-channels", () -> NotificationChannels.create(this))
                             .addBlocking("first-launch", this::initializeFirstEverAppLaunch)
@@ -144,6 +156,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addBlocking("blob-provider", this::initializeBlobProvider)
                             .addBlocking("feature-flags", FeatureFlags::init)
                             .addNonBlocking(this::initializeRevealableMessageManager)
+                            .addNonBlocking(this::initializePendingRetryReceiptManager)
                             .addNonBlocking(this::initializeGcmCheck)
                             .addNonBlocking(this::initializeSignedPreKeyCheck)
                             .addNonBlocking(this::initializePeriodicTasks)
@@ -154,7 +167,13 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addNonBlocking(RefreshPreKeysJob::scheduleIfNecessary)
                             .addNonBlocking(StorageSyncHelper::scheduleRoutineSync)
                             .addNonBlocking(() -> ApplicationDependencies.getJobManager().beginJobLoop())
+                            .addNonBlocking(EmojiSource::refresh)
+                            .addPostRender(() -> RateLimitUtil.retryAllRateLimitedMessages(this))
                             .addPostRender(this::initializeExpiringMessageManager)
+                            .addPostRender(() -> SignalStore.settings().setDefaultSms(Util.isDefaultSmsProvider(this)))
+                            .addPostRender(() -> DownloadLatestEmojiDataJob.scheduleIfNecessary(this))
+                            .addPostRender(EmojiSearchIndexDownloadJob::scheduleIfNecessary)
+                            .addPostRender(() -> DatabaseFactory.getMessageLogDatabase(this).trimOldMessages(System.currentTimeMillis(), FeatureFlags.retryRespondMaxAge()))
                             .execute();
 
     Log.d(TAG, "onCreate() took " + (System.currentTimeMillis() - startTime) + " ms");
@@ -228,7 +247,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
   }
 
   private void initializeLogging() {
-    persistentLogger = new PersistentLogger(this, LogSecretProvider.getOrCreateAttachmentSecret(this), BuildConfig.VERSION_NAME);
+    persistentLogger = new PersistentLogger(this, LogSecretProvider.getOrCreateAttachmentSecret(this), BuildConfig.VERSION_NAME, FeatureFlags.internalUser() ? 15 : 7, ByteUnit.KILOBYTES.toBytes(300));
     org.signal.core.util.logging.Log.initialize(FeatureFlags::internalUser, new AndroidLogger(), persistentLogger);
 
     SignalProtocolLoggerProvider.setProvider(new CustomSignalProtocolLogger());
@@ -291,6 +310,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
   private void initializeRevealableMessageManager() {
     ApplicationDependencies.getViewOnceMessageManager().scheduleIfNecessary();
+  }
+
+  private void initializePendingRetryReceiptManager() {
+    ApplicationDependencies.getPendingRetryReceiptManager().scheduleIfNecessary();
   }
 
   private void initializePeriodicTasks() {

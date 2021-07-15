@@ -43,15 +43,17 @@ import org.signal.core.util.logging.Log;
 import org.signal.paging.PagingController;
 import org.thoughtcrime.securesms.BindableConversationItem;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.components.MaskView;
+import org.thoughtcrime.securesms.conversation.colors.Colorizable;
+import org.thoughtcrime.securesms.conversation.colors.Colorizer;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4Playable;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackPolicyEnforcer;
-import org.thoughtcrime.securesms.giph.mp4.GiphyMp4Projection;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.recipients.Recipient;
+import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.DateUtils;
+import org.thoughtcrime.securesms.util.Projection;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.Util;
@@ -98,6 +100,8 @@ public class ConversationAdapter
   private static final int MESSAGE_TYPE_FOOTER              = 6;
   private static final int MESSAGE_TYPE_PLACEHOLDER         = 7;
 
+  private static final int PAYLOAD_TIMESTAMP = 0;
+
   private static final long HEADER_ID = Long.MIN_VALUE;
   private static final long FOOTER_ID = Long.MIN_VALUE + 1;
 
@@ -122,13 +126,15 @@ public class ConversationAdapter
   private boolean             hasWallpaper;
   private boolean             isMessageRequestAccepted;
   private ConversationMessage inlineContent;
+  private Colorizer           colorizer;
 
   ConversationAdapter(@NonNull LifecycleOwner lifecycleOwner,
                       @NonNull GlideRequests glideRequests,
                       @NonNull Locale locale,
                       @Nullable ItemClickListener clickListener,
                       @NonNull Recipient recipient,
-                      @NonNull AttachmentMediaSourceFactory attachmentMediaSourceFactory)
+                      @NonNull AttachmentMediaSourceFactory attachmentMediaSourceFactory,
+                      @NonNull Colorizer colorizer)
   {
     super(new DiffUtil.ItemCallback<ConversationMessage>() {
       @Override
@@ -156,6 +162,7 @@ public class ConversationAdapter
     this.hasWallpaper                 = recipient.hasWallpaper();
     this.isMessageRequestAccepted     = true;
     this.attachmentMediaSourceFactory = attachmentMediaSourceFactory;
+    this.colorizer                    = colorizer;
 
     setHasStableIds(true);
   }
@@ -242,6 +249,24 @@ public class ConversationAdapter
     }
   }
 
+  @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+    if (payloads.contains(PAYLOAD_TIMESTAMP)) {
+      switch (getItemViewType(position)) {
+        case MESSAGE_TYPE_INCOMING_TEXT:
+        case MESSAGE_TYPE_INCOMING_MULTIMEDIA:
+        case MESSAGE_TYPE_OUTGOING_TEXT:
+        case MESSAGE_TYPE_OUTGOING_MULTIMEDIA:
+        case MESSAGE_TYPE_UPDATE:
+          ConversationViewHolder conversationViewHolder = (ConversationViewHolder) holder;
+          conversationViewHolder.getBindable().updateTimestamps();
+        default:
+          return;
+      }
+    } else {
+      super.onBindViewHolder(holder, position, payloads);
+    }
+  }
+
   @Override
   public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     switch (getItemViewType(position)) {
@@ -270,7 +295,8 @@ public class ConversationAdapter
                                                   hasWallpaper,
                                                   isMessageRequestAccepted,
                                                   attachmentMediaSourceFactory,
-                                                  conversationMessage == inlineContent);
+                                                  conversationMessage == inlineContent,
+                                                  colorizer);
 
         if (conversationMessage == recordToPulse) {
           recordToPulse = null;
@@ -361,7 +387,13 @@ public class ConversationAdapter
       if (pagingController != null) {
         pagingController.onDataNeededAroundIndex(correctedPosition);
       }
-      return super.getItem(correctedPosition);
+
+      if (correctedPosition < getItemCount()) {
+        return super.getItem(correctedPosition);
+      } else {
+        Log.d(TAG, "Could not access corrected position " + correctedPosition + " as it is out of bounds.");
+        return null;
+      }
     }
   }
 
@@ -372,6 +404,10 @@ public class ConversationAdapter
 
   public void setPagingController(@Nullable PagingController pagingController) {
     this.pagingController = pagingController;
+  }
+
+  public boolean isForRecipientId(@NonNull RecipientId recipientId) {
+    return recipient.getId().equals(recipientId);
   }
 
   void onBindLastSeenViewHolder(StickyHeaderViewHolder viewHolder, int position) {
@@ -630,7 +666,11 @@ public class ConversationAdapter
     }
   }
 
-  final static class ConversationViewHolder extends RecyclerView.ViewHolder implements GiphyMp4Playable {
+  public void updateTimestamps() {
+    notifyItemRangeChanged(0, getItemCount(), PAYLOAD_TIMESTAMP);
+  }
+
+  final static class ConversationViewHolder extends RecyclerView.ViewHolder implements GiphyMp4Playable, Colorizable {
     public ConversationViewHolder(final @NonNull View itemView) {
       super(itemView);
     }
@@ -660,13 +700,18 @@ public class ConversationAdapter
     }
 
     @NonNull
-    public @Override GiphyMp4Projection getProjection(@NonNull RecyclerView recyclerView) {
+    public @Override Projection getProjection(@NonNull ViewGroup recyclerView) {
       return getBindable().getProjection(recyclerView);
     }
 
     @Override
     public boolean canPlayContent() {
       return getBindable().canPlayContent();
+    }
+
+    @Override
+    public @NonNull List<Projection> getColorizerProjections() {
+      return getBindable().getColorizerProjections();
     }
   }
 

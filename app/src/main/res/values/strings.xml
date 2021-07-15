@@ -6,6 +6,8 @@
     <string name="donate_url" translatable="false">https://signal.org/donate</string>
     <string name="backup_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string>
     <string name="transfer_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string>
+    <string name="support_center_url" translatable="false">https://support.signal.org/</string>
+    <string name="terms_and_privacy_policy_url" translatable="false">https://signal.org/legal</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -66,6 +68,7 @@
     <string name="DraftDatabase_Draft_video_snippet">(video)</string>
     <string name="DraftDatabase_Draft_location_snippet">(location)</string>
     <string name="DraftDatabase_Draft_quote_snippet">(reply)</string>
+    <string name="DraftDatabase_Draft_voice_note">(Voice message)</string>
 
     <!-- AttachmentKeyboard -->
     <string name="AttachmentKeyboard_gallery">Gallery</string>
@@ -114,7 +117,7 @@
     <string name="BlockUnblockDialog_unblock_s">Unblock %1$s?</string>
     <string name="BlockUnblockDialog_block">Block</string>
     <string name="BlockUnblockDialog_block_and_leave">Block and Leave</string>
-    <string name="BlockUnblockDialog_block_and_delete">Block and Delete</string>
+    <string name="BlockUnblockDialog_report_spam_and_block">Report spam and block</string>
 
     <!-- BucketedThreadMedia -->
     <string name="BucketedThreadMedia_Today">Today</string>
@@ -202,6 +205,7 @@
     <string name="ConversationItem_error_network_not_delivered">Send failed</string>
     <string name="ConversationItem_received_key_exchange_message_tap_to_process">Received key exchange message, tap to process.</string>
     <string name="ConversationItem_group_action_left">%1$s has left the group.</string>
+    <string name="ConversationItem_send_paused">Send paused</string>
     <string name="ConversationItem_click_to_approve_unencrypted">Send failed, tap for unsecured fallback</string>
     <string name="ConversationItem_click_to_approve_unencrypted_sms_dialog_title">Fallback to unencrypted SMS?</string>
     <string name="ConversationItem_click_to_approve_unencrypted_mms_dialog_title">Fallback to unencrypted MMS?</string>
@@ -281,6 +285,12 @@
     <string name="ConversationActivity_full">Full</string>
 
     <string name="ConversationActivity_error_sending_media">Error sending media</string>
+
+    <string name="ConversationActivity__reported_as_spam_and_blocked">Reported as spam and blocked.</string>
+
+    <string name="ConversationActivity_gifs_have_moved">GIFs have moved</string>
+    <string name="ConversationActivity_look_for_gifs_next_to_emoji_and_stickers">Look for GIFs next to emoji and stickers.</string>
+    <string name="ConversationActivity__gifs_are_now_here">GIFs are now here.</string>
 
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
@@ -368,8 +378,12 @@
     <string name="ConversationTitleView_verified">Verified</string>
     <string name="ConversationTitleView_you">You</string>
 
+    <!-- ConversationTypingView -->
+    <string name="ConversationTypingView__plus_d">+%1$d</string>
+
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity_some_contacts_cannot_be_in_legacy_groups">Some contacts cannot be in legacy groups.</string>
+    <string name="CreateGroupActivity__select_members">Select members</string>
 
     <!-- CreateProfileActivity -->
     <string name="CreateProfileActivity__profile">Profile</string>
@@ -500,6 +514,7 @@
     <string name="AddToGroupActivity_add_to_groups">Add to groups</string>
     <string name="AddToGroupActivity_this_person_cant_be_added_to_legacy_groups">This person can\'t be added to legacy groups.</string>
     <string name="AddToGroupActivity_add">Add</string>
+    <string name="AddToGroupActivity_add_to_a_group">Add to a group</string>
 
     <!-- ChooseNewAdminActivity -->
     <string name="ChooseNewAdminActivity_choose_new_admin">Choose new admin</string>
@@ -561,11 +576,6 @@
         <item quantity="one">This member is not capable of joining New Groups, and will be removed from the group:</item>
         <item quantity="other">These members are not capable of joining New Groups, and will be removed from the group:</item>
     </plurals>
-
-    <!-- GroupsV1MigrationInitiationReminder -->
-    <string name="GroupsV1MigrationInitiationReminder_to_access_new_features_like_mentions">To access new features like @mentions and admins, upgrade this group.</string>
-    <string name="GroupsV1MigrationInitiationReminder_not_now">Not now</string>
-    <string name="GroupsV1MigrationInitiationReminder_upgrade_group">Upgrade group</string>
 
     <!-- GroupsV1MigrationSuggestionsReminder -->
     <plurals name="GroupsV1MigrationSuggestionsReminder_members_couldnt_be_added_to_the_new_group">
@@ -660,6 +670,7 @@
         <item quantity="other">Add %3$d members to \"%2$s\"?</item>
     </plurals>
     <string name="AddMembersActivity__add">Add</string>
+    <string name="AddMembersActivity__add_members">Add members</string>
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Name this group</string>
@@ -711,7 +722,7 @@
     <string name="ManageGroupActivity_mute_notifications">Mute notifications</string>
     <string name="ManageGroupActivity_custom_notifications">Custom notifications</string>
     <string name="ManageGroupActivity_mentions">Mentions</string>
-    <string name="ManageGroupActivity_chat_wallpaper">Chat wallpaper</string>
+    <string name="ManageGroupActivity_chat_color_and_wallpaper">Chat color &amp; wallpaper</string>
     <string name="ManageGroupActivity_until_s">Until %1$s</string>
     <string name="ManageGroupActivity_always">Always</string>
     <string name="ManageGroupActivity_off">Off</string>
@@ -743,6 +754,8 @@
     <string name="ManageGroupActivity_upgrade_this_group">upgrade this group.</string>
     <string name="ManageGroupActivity_this_is_an_insecure_mms_group">This is an insecure MMS Group. To chat privately, invite your contacts to Signal.</string>
     <string name="ManageGroupActivity_invite_now">Invite now</string>
+    <string name="ManageGroupActivity_more">more</string>
+    <string name="ManageGroupActivity_add_group_description">Add group description…</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Notify me for Mentions</string>
@@ -760,32 +773,11 @@
     <string name="ManageProfileFragment_failed_to_set_avatar">Failed to set avatar</string>
 
     <!-- ManageRecipientActivity -->
-    <string name="ManageRecipientActivity_add_to_system_contacts">Add to system contacts</string>
-    <string name="ManageRecipientActivity_this_person_is_in_your_contacts">This person is in your contacts</string>
-    <string name="ManageRecipientActivity_disappearing_messages">Disappearing messages</string>
-    <string name="ManageRecipientActivity_chat_color">Chat color</string>
-    <string name="ManageRecipientActivity_chat_wallpaper">Chat wallpaper</string>
-    <string name="ManageRecipientActivity_block">Block</string>
-    <string name="ManageRecipientActivity_unblock">Unblock</string>
-    <string name="ManageRecipientActivity_view_safety_number">View safety number</string>
-    <string name="ManageRecipientActivity_mute_notifications">Mute notifications</string>
-    <string name="ManageRecipientActivity_custom_notifications">Custom notifications</string>
-    <string name="ManageRecipientActivity_until_s">Until %1$s</string>
-    <string name="ManageRecipientActivity_always">Always</string>
-    <string name="ManageRecipientActivity_off">Off</string>
-    <string name="ManageRecipientActivity_on">On</string>
-    <string name="ManageRecipientActivity_add_to_a_group">Add to a group</string>
-    <string name="ManageRecipientActivity_view_all_groups">View all groups</string>
-    <string name="ManageRecipientActivity_see_all">See all</string>
     <string name="ManageRecipientActivity_no_groups_in_common">No groups in common</string>
     <plurals name="ManageRecipientActivity_d_groups_in_common">
         <item quantity="one">%d group in common</item>
         <item quantity="other">%d groups in common</item>
     </plurals>
-    <string name="ManageRecipientActivity_message_description">Message</string>
-    <string name="ManageRecipientActivity_voice_call_description">Voice call</string>
-    <string name="ManageRecipientActivity_insecure_voice_call_description">Insecure voice call</string>
-    <string name="ManageRecipientActivity_video_call_description">Video call</string>
 
     <plurals name="GroupMemberList_invited">
         <item quantity="one">%1$s invited 1 person</item>
@@ -953,6 +945,7 @@
     <string name="MediaOverviewActivity_image">Image</string>
     <string name="MediaOverviewActivity_detail_line_2_part" translatable="false">%1$s &#183; %2$s</string>
     <string name="MediaOverviewActivity_detail_line_3_part" translatable="false">%1$s &#183; %2$s &#183; %3$s</string>
+    <string name="MediaOverviewActivity_voice_message">Voice message</string>
 
     <string name="MediaOverviewActivity_sent_by_s">Sent by %1$s</string>
     <string name="MediaOverviewActivity_sent_by_you">Sent by you</string>
@@ -970,6 +963,7 @@
     <string name="Megaphones_new_group">New group</string>
     <string name="Megaphones_invite_friends">Invite friends</string>
     <string name="Megaphones_use_sms">Use SMS</string>
+    <string name="Megaphones_appearance">Appearance</string>
 
     <!-- NotificationBarManager -->
     <string name="NotificationBarManager_signal_call_in_progress">Signal call in progress</string>
@@ -999,6 +993,8 @@
     <!-- MediaSendActivity -->
     <string name="MediaSendActivity_add_a_caption">Add a caption…</string>
     <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit">An item was removed because it exceeded the size limit</string>
+    <string name="MediaSendActivity_an_item_was_removed_because_it_had_an_unknown_type">An item was removed because it had an unknown type</string>
+    <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit_or_had_an_unknown_type">An item was removed because it exceeded the size limit or had an unknown type</string>
     <string name="MediaSendActivity_camera_unavailable">Camera unavailable.</string>
     <string name="MediaSendActivity_message_to_s">Message to %s</string>
     <string name="MediaSendActivity_message">Message</string>
@@ -1015,6 +1011,10 @@
     <!-- MediaRepository -->
     <string name="MediaRepository_all_media">All media</string>
     <string name="MediaRepository__camera">Camera</string>
+
+    <!-- MessageDecryptionUtil -->
+    <string name="MessageDecryptionUtil_failed_to_decrypt_message">Failed to decrypt message</string>
+    <string name="MessageDecryptionUtil_tap_to_send_a_debug_log">Tap to send a debug log</string>
 
     <!-- MessageRecord -->
     <string name="MessageRecord_unknown">Unknown</string>
@@ -1126,6 +1126,11 @@
     <string name="MessageRecord_s_changed_the_group_name_to_s">%1$s changed the group name to \"%2$s\".</string>
     <string name="MessageRecord_the_group_name_has_changed_to_s">The group name has changed to \"%1$s\".</string>
 
+    <!-- GV2 description change -->
+    <string name="MessageRecord_you_changed_the_group_description">You changed the group description.</string>
+    <string name="MessageRecord_s_changed_the_group_description">%1$s changed the group description.</string>
+    <string name="MessageRecord_the_group_description_has_changed">The group description has changed.</string>
+
     <!-- GV2 avatar change -->
     <string name="MessageRecord_you_changed_the_group_avatar">You changed the group avatar.</string>
     <string name="MessageRecord_s_changed_the_group_avatar">%1$s changed the group avatar.</string>
@@ -1192,6 +1197,7 @@
     <string name="MessageRecord_you_marked_your_safety_number_with_s_verified_from_another_device">You marked your safety number with %s verified from another device</string>
     <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified">You marked your safety number with %s unverified</string>
     <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified_from_another_device">You marked your safety number with %s unverified from another device</string>
+    <string name="MessageRecord_a_message_from_s_couldnt_be_delivered">A message from %s couldn\'t be delivered</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s started a group call · %2$s</string>
@@ -1279,11 +1285,6 @@
     <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal needs the Camera permission in order to scan a QR code, but it has been permanently denied. Please continue to app settings, select \"Permissions\", and enable \"Camera\".</string>
     <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Unable to scan a QR code without the Camera permission</string>
 
-    <!-- ExpirationDialog -->
-    <string name="ExpirationDialog_disappearing_messages">Disappearing messages</string>
-    <string name="ExpirationDialog_your_messages_will_not_expire">Your messages will not expire.</string>
-    <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Messages sent and received in this conversation will disappear %s after they have been seen.</string>
-
     <!-- OutdatedBuildReminder -->
     <string name="OutdatedBuildReminder_update_now">Update now</string>
     <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">This version of Signal will expire today. Update to the most recent version.</string>
@@ -1354,6 +1355,14 @@
     <!-- ReactionsRecipientAdapter -->
     <string name="ReactionsRecipientAdapter_you">You</string>
 
+    <!-- RecaptchaRequiredBottomSheetFragment -->
+    <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">Verify to continue messaging</string>
+    <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">To help prevent spam on Signal, please complete verification.</string>
+    <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">After verifying, you can continue messaging. Any paused messages will automatically be sent.</string>
+
+    <!-- Recipient -->
+    <string name="Recipient_you">You</string>
+
     <!-- RecipientPreferencesActivity -->
     <string name="RecipientPreferenceActivity_block">Block</string>
     <string name="RecipientPreferenceActivity_unblock">Unblock</string>
@@ -1395,6 +1404,7 @@
     <string name="WebRtcCallView__no_one_else_is_here">No one else is here</string>
     <string name="WebRtcCallView__s_is_in_this_call">%1$s is in this call</string>
     <string name="WebRtcCallView__s_and_s_are_in_this_call">%1$s and %2$s are in this call</string>
+    <string name="WebRtcCallView__s_is_presenting">%1$s is presenting</string>
 
     <plurals name="WebRtcCallView__s_s_and_d_others_are_in_this_call">
         <item quantity="one">%1$s, %2$s, and %3$d other are in this call</item>
@@ -1415,6 +1425,9 @@
     <string name="CallParticipantView__cant_receive_audio_and_video_from_s">Can\'t receive audio and video from %1$s</string>
     <string name="CallParticipantView__this_may_be_Because_they_have_not_verified_your_safety_number_change">This may be because they have not verified your safety number change, there\'s a problem with their device, or they have blocked you.</string>
 
+    <!-- CallToastPopupWindow -->
+    <string name="CallToastPopupWindow__swipe_to_view_screen_share">Swipe to view screen share</string>
+
     <!-- ProxyBottomSheetFragment -->
     <string name="ProxyBottomSheetFragment_proxy_server">Proxy server</string>
     <string name="ProxyBottomSheetFragment_proxy_address">Proxy address</string>
@@ -1422,6 +1435,9 @@
     <string name="ProxyBottomSheetFragment_use_proxy">Use proxy</string>
     <string name="ProxyBottomSheetFragment_successfully_connected_to_proxy">Successfully connected to proxy.</string>
 
+    <!-- RecaptchaProofActivity -->
+    <string name="RecaptchaProofActivity_failed_to_submit">Failed to submit</string>
+    <string name="RecaptchaProofActivity_complete_verification">Complete verification</string>
 
     <!-- RegistrationActivity -->
     <string name="RegistrationActivity_select_your_country">Select your country</string>
@@ -1562,6 +1578,7 @@
     <string name="SubmitDebugLogActivity_success">Success!</string>
     <string name="SubmitDebugLogActivity_copy_this_url_and_add_it_to_your_issue">Copy this URL and add it to your issue report or support email:\n\n<b>%1$s</b></string>
     <string name="SubmitDebugLogActivity_share">Share</string>
+    <string name="SubmitDebugLogActivity_this_log_will_be_posted_publicly_online">This log will be posted publicly online for contributors to view. You may examine and edit it before uploading.</string>
 
     <!-- SupportEmailUtil -->
     <string name="SupportEmailUtil_support_email" translatable="false">support@signal.org</string>
@@ -1597,6 +1614,7 @@
     <string name="ThreadRecord_you_marked_verified">You marked verified</string>
     <string name="ThreadRecord_you_marked_unverified">You marked unverified</string>
     <string name="ThreadRecord_message_could_not_be_processed">Message could not be processed</string>
+    <string name="ThreadRecord_delivery_issue">Delivery issue</string>
     <string name="ThreadRecord_message_request">Message Request</string>
     <string name="ThreadRecord_photo">Photo</string>
     <string name="ThreadRecord_gif">GIF</string>
@@ -1694,6 +1712,8 @@
     <string name="MessageNotifier_message_delivery_failed">Message delivery failed.</string>
     <string name="MessageNotifier_failed_to_deliver_message">Failed to deliver message.</string>
     <string name="MessageNotifier_error_delivering_message">Error delivering message.</string>
+    <string name="MessageNotifier_message_delivery_paused">Message delivery paused.</string>
+    <string name="MessageNotifier_verify_to_continue_messaging_on_signal">Verify to continue messaging on Signal.</string>
     <string name="MessageNotifier_mark_all_as_read">Mark all as read</string>
     <string name="MessageNotifier_mark_read">Mark read</string>
     <string name="MessageNotifier_turn_off_these_notifications">Turn off these notifications</string>
@@ -1751,6 +1771,7 @@
     <string name="SingleRecipientNotificationBuilder_signal">Signal</string>
     <string name="SingleRecipientNotificationBuilder_new_message">New message</string>
     <string name="SingleRecipientNotificationBuilder_message_request">Message request</string>
+    <string name="SingleRecipientNotificationBuilder_you">You</string>
 
     <!-- ThumbnailView -->
     <string name="ThumbnailView_Play_video_description">Play video</string>
@@ -1882,6 +1903,8 @@
     <string name="ConversationUpdateItem_enable_call_notifications">Enable Call Notifications</string>
     <string name="ConversationUpdateItem_no_groups_in_common_review_requests_carefully">No groups in common. Review requests carefully.</string>
     <string name="ConversationUpdateItem_no_contacts_in_this_group_review_requests_carefully">No contacts in this group. Review requests carefully.</string>
+    <string name="ConversationUpdateItem_view">View</string>
+    <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">The disappearing message time will be set to %1$s when you message them.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Play … Pause</string>
@@ -1901,6 +1924,7 @@
 
     <!-- safety_number_change_dialog -->
     <string name="safety_number_change_dialog__safety_number_changes">Safety Number Changes</string>
+    <string name="safety_number_change_dialog__accept">Accept</string>
     <string name="safety_number_change_dialog__send_anyway">Send anyway</string>
     <string name="safety_number_change_dialog__call_anyway">Call anyway</string>
     <string name="safety_number_change_dialog__join_call">Join call</string>
@@ -2038,6 +2062,11 @@
     <string name="prompt_mms_activity__signal_requires_mms_settings_to_deliver_media_and_group_messages">Signal requires MMS settings to deliver media and group messages through your wireless carrier. Your device does not make this information available, which is occasionally true for locked devices and other restrictive configurations.</string>
     <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">To send media and group messages, tap \'OK\' and complete the requested settings. The MMS settings for your carrier can generally be located by searching for \'your carrier APN\'. You will only need to do this once.</string>
 
+    <!-- BadDecryptLearnMoreDialog -->
+    <string name="BadDecryptLearnMoreDialog_delivery_issue">Delivery Issue</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">A message, sticker, reaction, or read receipt couldn\'t be delivered to you from %s. They may have tried sending it to you directly, or in a group.</string>
+    <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">A message, sticker, reaction, or read receipt couldn\'t be delivered to you from %s.</string>
+
     <!-- profile_create_activity -->
     <string name="CreateProfileActivity_first_name_required">First name (required)</string>
     <string name="CreateProfileActivity_last_name_optional">Last name (optional)</string>
@@ -2045,6 +2074,7 @@
     <string name="CreateProfileActivity__username">Username</string>
     <string name="CreateProfileActivity__create_a_username">Create a username</string>
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Custom MMS group names and photos will only be visible to you.</string>
+    <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Group descriptions will be visible to members of this group and people who have been invited.</string>
 
     <!-- EditAboutFragment -->
     <string name="EditAboutFragment_about">About</string>
@@ -2059,8 +2089,9 @@
     <string name="EditAboutFragment_working_on_something_new">Working on something new</string>
 
     <!-- EditProfileFragment -->
-    <string name="EditProfileFragment__edit_group_name_and_photo">Edit group name and photo</string>
+    <string name="EditProfileFragment__edit_group">Edit group</string>
     <string name="EditProfileFragment__group_name">Group name</string>
+    <string name="EditProfileFragment__group_description">Group description</string>
     <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string>
 
     <!-- EditProfileNameFragment -->
@@ -2103,6 +2134,7 @@
     <string name="message_details_recipient_header__delivered_to">Delivered to</string>
     <string name="message_details_recipient_header__read_by">Read by</string>
     <string name="message_details_recipient_header__not_sent">Not sent</string>
+    <string name="message_details_recipient_header__viewed">Viewed by</string>
 
     <!-- message_Details_recipient -->
     <string name="message_details_recipient__failed_to_send">Failed to send</string>
@@ -2148,6 +2180,7 @@
     <string name="HelpFragment__could_not_upload_logs">Could not upload logs</string>
     <string name="HelpFragment__please_be_as_descriptive_as_possible">Please be as descriptive as possible to help us understand the issue.</string>
     <string-array name="HelpFragment__categories">
+        <item>-- Please select an option --</item>
         <item>Something\'s Not Working</item>
         <item>Feature Request</item>
         <item>Question</item>
@@ -2168,6 +2201,7 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Symbols</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Flags</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Emoticons</string>
+    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">No results found</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Use default</string>
@@ -2283,6 +2317,7 @@
     <string name="preferences__appearance">Appearance</string>
     <string name="preferences__theme">Theme</string>
     <string name="preferences__chat_wallpaper">Chat wallpaper</string>
+    <string name="preferences__chat_color_and_wallpaper">Chat color &amp; wallpaper</string>
     <string name="preferences__disable_pin">Disable PIN</string>
     <string name="preferences__enable_pin">Enable PIN</string>
     <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">If you disable the PIN, you will lose all data when you re-register Signal unless you manually back up and restore. You can not turn on Registration Lock while the PIN is disabled.</string>
@@ -2301,7 +2336,9 @@
     <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">If read receipts are disabled, you won\'t be able to see read receipts from others.</string>
     <string name="preferences__typing_indicators">Typing indicators</string>
     <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">If typing indicators are disabled, you won\'t be able to see typing indicators from others.</string>
-    <string name="preferences__request_keyboard_to_disable_personalized_learning">Request keyboard to disable personalized learning. This setting is not a guarantee, and your keyboard may ignore it.</string>
+    <string name="preferences__request_keyboard_to_disable">Request keyboard to disable personalized learning.</string>
+    <string name="preferences__this_setting_is_not_a_guarantee">This setting is not a guarantee, and your keyboard may ignore it.</string>
+    <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string>
     <string name="preferences_app_protection__blocked_users">Blocked users</string>
     <string name="preferences_chats__when_using_mobile_data">When using mobile data</string>
     <string name="preferences_chats__when_using_wifi">When using Wi-Fi</string>
@@ -2341,8 +2378,8 @@
     <string name="preferences_data_and_storage__calls">Calls</string>
     <string name="preferences_data_and_storage__use_less_data_for_calls">Use less data for calls</string>
     <string name="preferences_data_and_storage__never">Never</string>
-    <string name="preferences_data_and_storage__wifi_and_cellular">WiFi and Cellular</string>
-    <string name="preferences_data_and_storage__cellular_only">Cellular only</string>
+    <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi and mobile data</string>
+    <string name="preferences_data_and_storage__mobile_data_only">Mobile data only</string>
     <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Using less data may improve calls on bad networks</string>
     <string name="preferences_notifications__messages">Messages</string>
     <string name="preferences_notifications__events">Events</string>
@@ -2367,7 +2404,7 @@
     <string name="preferences_off">Off</string>
     <string name="preferences_on">On</string>
     <string name="preferences_proxy_address">Proxy address</string>
-    <string name="preferences_only_use_a_proxy_if">Only use a proxy if you\'re not able to connect to Signal on cellular or Wi-Fi.</string>
+    <string name="preferences_only_use_a_proxy_if">Only use a proxy if you\'re not able to connect to Signal on mobile data or Wi-Fi.</string>
     <string name="preferences_share">Share</string>
     <string name="preferences_save">Save</string>
     <string name="preferences_connecting_to_proxy">Connecting to proxy…</string>
@@ -2418,9 +2455,26 @@
     <string name="preferences__internal_force_censorship" translatable="false">Force censorship</string>
     <string name="preferences__internal_force_censorship_description" translatable="false">Force the app to behave as if it is in a country where Signal is censored.</string>
     <string name="preferences__internal_conversations_and_shortcuts" translatable="false">Conversations and Shortcuts</string>
+    <string name="preferences__internal_emoji" translatable="false">Emoji</string>
+    <string name="preferences__internal_use_built_in_emoji_set" translatable="false">Use built-in emoji set.</string>
+    <string name="preferences__internal_current_version_builtin" translatable="false">Current version: Built-In</string>
+    <string name="preferences__internal_current_version_d_at_density_s" translatable="false">Current version: %1$d at density %2$s</string>
     <string name="preferences__internal_delete_all_dynamic_shortcuts" translatable="false">Delete all dynamic shortcuts</string>
     <string name="preferences__internal_click_to_delete_all_dynamic_shortcuts" translatable="false">Click to delete all dynamic shortcuts</string>
     <string name="preferences__internal_disable_profile_sharing" translatable="false">Disable Profile Sharing</string>
+    <string name="preferences__internal_delete_session" translatable="false">Delete Session</string>
+    <string name="preferences__internal_sender_key" translatable="false">Sender Key</string>
+    <string name="preferences__internal_clear_all_state" translatable="false">Clear all state</string>
+    <string name="preferences__internal_click_to_delete_all_sender_key_state" translatable="false">Click to delete all sender key state</string>
+    <string name="preferences__internal_clear_shared_state" translatable="false">Clear shared state</string>
+    <string name="preferences__internal_click_to_delete_all_sharing_state" translatable="false">Click to delete all sharing state</string>
+    <string name="preferences__internal_remove_two_person_minimum" translatable="false">Remove 2 person minimum</string>
+    <string name="preferences__internal_remove_the_requirement_that_you_need" translatable="false">Remove the requirement that you  need at least 2 recipients to use sender key.</string>
+    <string name="preferences__internal_delay_resends" translatable="false">Delay resends</string>
+    <string name="preferences__internal_delay_resending_messages_in_response_to_retry_receipts" translatable="false">Delay resending messages in response to retry receipts by 10 seconds.</string>
+    <string name="preferences__internal_calling" translatable="false">Group call server</string>
+    <string name="preferences__internal_calling_default" translatable="false">Default</string>
+    <string name="preferences__internal_calling_s_server" translatable="false">%1$s server</string>
 
     <!-- Payments -->
     <string name="PaymentsActivityFragment__all_activity">All activity</string>
@@ -2954,7 +3008,7 @@
     <string name="NewDeviceTransferInstructions__first_bullet">1.</string>
     <string name="NewDeviceTransferInstructions__tap_on_your_profile_photo_in_the_top_left_to_open_settings">Tap on your profile photo in the top left to open Settings</string>
     <string name="NewDeviceTransferInstructions__second_bullet">2.</string>
-    <string name="NewDeviceTransferInstructions__tap_on_chats">Tap on "Chats"</string>
+    <string name="NewDeviceTransferInstructions__tap_on_account">Tap on "Account"</string>
     <string name="NewDeviceTransferInstructions__third_bullet">3.</string>
     <string name="NewDeviceTransferInstructions__tap_transfer_account_and_then_continue_on_both_devices">Tap "Transfer Account" and then "Continue" on both devices</string>
 
@@ -3076,7 +3130,7 @@
     <string name="RecipientBottomSheet_add_to_a_group">Add to a group</string>
     <string name="RecipientBottomSheet_add_to_another_group">Add to another group</string>
     <string name="RecipientBottomSheet_view_safety_number">View safety number</string>
-    <string name="RecipientBottomSheet_make_group_admin">Make group admin</string>
+    <string name="RecipientBottomSheet_make_admin">Make admin</string>
     <string name="RecipientBottomSheet_remove_as_admin">Remove as admin</string>
     <string name="RecipientBottomSheet_remove_from_group">Remove from group</string>
     <string name="RecipientBottomSheet_message_description">Message</string>
@@ -3115,6 +3169,7 @@
     <string name="GroupLinkBottomSheet_the_link_is_not_currently_active">The link is not currently active</string>
 
     <!-- VoiceNotePlaybackPreparer -->
+    <string name="VoiceNotePlaybackPreparer__failed_to_play_voice_message">Failed to play voice message</string>
 
     <!-- VoiceNoteMediaDescriptionCompatFactory -->
     <string name="VoiceNoteMediaDescriptionCompatFactory__voice_message">Voice message &#183; %1$s</string>
@@ -3190,11 +3245,15 @@
 
     <!-- CreateGroupActivity -->
     <string name="CreateGroupActivity__skip">Skip</string>
+    <plurals name="CreateGroupActivity__d_members">
+        <item quantity="one">%1$d member</item>
+        <item quantity="other">%1$d members</item>
+    </plurals>
 
     <!-- ShareActivity -->
     <string name="ShareActivity__share">Share</string>
     <string name="ShareActivity__send">Send</string>
-    <string name="ShareActivity__s_comma">%1$s,</string>
+    <string name="ShareActivity__comma_s">, %1$s</string>
     <string name="ShareActivity__sharing_to_multiple_chats_is">Sharing to multiple chats is only supported for Signal messages</string>
 
     <!-- MultiShareDialogs -->
@@ -3208,17 +3267,25 @@
     <string name="ChatWallpaperActivity__chat_wallpaper">Chat wallpaper</string>
 
     <!-- ChatWallpaperFragment -->
+    <string name="ChatWallpaperFragment__chat_color">Chat color</string>
+    <string name="ChatWallpaperFragment__reset_chat_colors">Reset chat colors</string>
+    <string name="ChatWallpaperFragment__reset_chat_color">Reset chat color</string>
+    <string name="ChatWallpaperFragment__reset_chat_color_question">Reset chat color?</string>
     <string name="ChatWallpaperFragment__set_wallpaper">Set wallpaper</string>
-    <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">Dark theme dims wallpaper</string>
-    <string name="ChatWallpaperFragment__clear_wallpaper">Clear wallpaper</string>
-    <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">Clear wallpaper for this chat?</string>
-    <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">Clear wallpaper? This will not clear custom wallpapers you’ve set for your chats.</string>
-    <string name="ChatWallpaperFragment__reset_all_wallpapers">Reset all wallpapers</string>
-    <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">Reset all wallpapers, including custom wallpapers you’ve set for your chats?</string>
+    <string name="ChatWallpaperFragment__dark_mode_dims_wallpaper">Dark mode dims wallpaper</string>
     <string name="ChatWallpaperFragment__contact_name">Contact name</string>
     <string name="ChatWallpaperFragment__reset">Reset</string>
     <string name="ChatWallpaperFragment__clear">Clear</string>
     <string name="ChatWallpaperFragment__wallpaper_preview_description">Wallpaper preview</string>
+    <string name="ChatWallpaperFragment__would_you_like_to_override_all_chat_colors">Would you like to override all chat colors?</string>
+    <string name="ChatWallpaperFragment__would_you_like_to_override_all_wallpapers">Would you like to override all wallpapers?</string>
+    <string name="ChatWallpaperFragment__reset_default_colors">Reset default colors</string>
+    <string name="ChatWallpaperFragment__reset_all_colors">Reset all colors</string>
+    <string name="ChatWallpaperFragment__reset_default_wallpaper">Reset default wallpaper</string>
+    <string name="ChatWallpaperFragment__reset_all_wallpapers">Reset all wallpapers</string>
+    <string name="ChatWallpaperFragment__reset_wallpapers">Reset wallpapers</string>
+    <string name="ChatWallpaperFragment__reset_wallpaper">Reset wallpaper</string>
+    <string name="ChatWallpaperFragment__reset_wallpaper_question">Reset wallpaper?</string>
 
     <!-- ChatWallpaperSelectionFragment -->
     <string name="ChatWallpaperSelectionFragment__choose_from_photos">Choose from photos</string>
@@ -3345,6 +3412,226 @@
     <string name="GroupsInCommonMessageRequest__about_message_requests">About message requests</string>
     <string name="GroupsInCommonMessageRequest__okay">Okay</string>
     <string name="GroupsInCommonMessageRequest__support_article" translatable="false">https://support.signal.org/hc/articles/360007459591</string>
+    <string name="ChatColorSelectionFragment__heres_a_preview_of_the_chat_color">Here\'s a preview of the chat color.</string>
+    <string name="ChatColorSelectionFragment__the_color_is_visible_to_only_you">The color is visible to only you.</string>
+
+    <!-- GroupDescriptionDialog -->
+    <string name="GroupDescriptionDialog__group_description">Group description</string>
+
+    <!-- QualitySelectorBottomSheetDialog -->
+    <string name="QualitySelectorBottomSheetDialog__standard">Standard</string>
+    <string name="QualitySelectorBottomSheetDialog__faster_less_data">Faster, less data</string>
+    <string name="QualitySelectorBottomSheetDialog__high">High</string>
+    <string name="QualitySelectorBottomSheetDialog__slower_more_data">Slower, more data</string>
+    <string name="QualitySelectorBottomSheetDialog__photo_quality">Photo quality</string>
+
+    <!-- AppSettingsFragment -->
+    <string name="AppSettingsFragment__invite_your_friends">Invite your friends</string>
+
+    <!-- AccountSettingsFragment -->
+    <string name="AccountSettingsFragment__account">Account</string>
+    <string name="AccountSettingsFragment__youll_be_asked_less_frequently">You\'ll be asked less frequently over time</string>
+    <string name="AccountSettingsFragment__require_your_signal_pin">Require your Signal PIN to register your phone number with Signal again</string>
+
+    <!-- ChatsSettingsFragment -->
+    <string name="ChatsSettingsFragment__keyboard">Keyboard</string>
+    <string name="ChatsSettingsFragment__enter_key_sends">Enter key sends</string>
+
+    <!--SmsSettingsFragment -->
+    <string name="SmsSettingsFragment__use_as_default_sms_app">Use as default SMS app</string>
+
+    <!-- NotificationsSettingsFragment -->
+    <string name="NotificationsSettingsFragment__messages">Messages</string>
+    <string name="NotificationsSettingsFragment__calls">Calls</string>
+    <string name="NotificationsSettingsFragment__notify_when">Notify when…</string>
+    <string name="NotificationsSettingsFragment__contact_joins_signal">Contact joins Signal</string>
+
+    <!-- PrivacySettingsFragment -->
+    <string name="PrivacySettingsFragment__blocked">Blocked</string>
+    <string name="PrivacySettingsFragment__d_contacts">%1$d contacts</string>
+    <string name="PrivacySettingsFragment__messaging">Messaging</string>
+    <string name="PrivacySettingsFragment__disappearing_messages">Disappearing messages</string>
+    <string name="PrivacySettingsFragment__app_security">App security</string>
+    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Block screenshots in the recents list and inside the app</string>
+    <string name="PrivacySettingsFragment__signal_message_and_calls">Signal messages and calls, always relay calls, and sealed sender</string>
+    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Default timer for new chats</string>
+    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Set a default disappearing message timer for all new chats started by you.</string>
+
+    <!-- AdvancedPrivacySettingsFragment -->
+    <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string>
+    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Show status icon</string>
+    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Show an icon in message details when they were delivered using sealed sender.</string>
+
+    <!-- ExpireTimerSettingsFragment -->
+    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">When enabled, new messages sent and received in new chats started by you will disappear after they have been seen.</string>
+    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">When enabled, new messages sent and received in this chat will disappear after they have been seen.</string>
+    <string name="ExpireTimerSettingsFragment__off">Off</string>
+    <string name="ExpireTimerSettingsFragment__4_weeks">4 weeks</string>
+    <string name="ExpireTimerSettingsFragment__1_week">1 week</string>
+    <string name="ExpireTimerSettingsFragment__1_day">1 day</string>
+    <string name="ExpireTimerSettingsFragment__8_hours">8 hours</string>
+    <string name="ExpireTimerSettingsFragment__1_hour">1 hour</string>
+    <string name="ExpireTimerSettingsFragment__5_minutes">5 minutes</string>
+    <string name="ExpireTimerSettingsFragment__30_seconds">30 seconds</string>
+    <string name="ExpireTimerSettingsFragment__custom_time">Custom time</string>
+    <string name="ExpireTimerSettingsFragment__set">Set</string>
+    <string name="ExpireTimerSettingsFragment__save">Save</string>
+
+    <string name="CustomExpireTimerSelectorView__seconds">seconds</string>
+    <string name="CustomExpireTimerSelectorView__minutes">minutes</string>
+    <string name="CustomExpireTimerSelectorView__hours">hours</string>
+    <string name="CustomExpireTimerSelectorView__days">days</string>
+    <string name="CustomExpireTimerSelectorView__weeks">weeks</string>
+
+    <!-- HelpSettingsFragment -->
+    <string name="HelpSettingsFragment__support_center">Support center</string>
+    <string name="HelpSettingsFragment__contact_us">Contact us</string>
+    <string name="HelpSettingsFragment__version">Version</string>
+    <string name="HelpSettingsFragment__debug_log">Debug log</string>
+    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Terms &amp; Privacy Policy</string>
+    <string name="HelpFragment__copyright_signal_messenger">Copyright Signal Messenger</string>
+    <string name="HelpFragment__licenced_under_the_gplv3">Licensed under the GPLv3</string>
+
+    <!-- DataAndStorageSettingsFragment -->
+    <string name="DataAndStorageSettingsFragment__calls">Calls</string>
+
+    <!-- ChatColorSelectionFragment -->
+    <string name="ChatColorSelectionFragment__auto">Auto</string>
+    <string name="ChatColorSelectionFragment__use_custom_colors">Use custom colors</string>
+    <string name="ChatColorSelectionFragment__chat_color">Chat color</string>
+    <string name="ChatColorSelectionFragment__edit">Edit</string>
+    <string name="ChatColorSelectionFragment__duplicate">Duplicate</string>
+    <string name="ChatColorSelectionFragment__delete">Delete</string>
+    <string name="ChatColorSelectionFragment__delete_color">Delete color</string>
+    <plurals name="ChatColorSelectionFragment__this_custom_color_is_used">
+        <item quantity="one">This custom color is used in %1$d chat. Do you want to delete it for all chats?</item>
+        <item quantity="other">This custom color is used in %1$d chats. Do you want to delete it for all chats?</item>
+    </plurals>
+    <string name="ChatColorSelectionFragment__delete_chat_color">Delete chat color?</string>
+
+    <!-- CustomChatColorCreatorFragment -->
+    <string name="CustomChatColorCreatorFragment__solid">Solid</string>
+    <string name="CustomChatColorCreatorFragment__gradient">Gradient</string>
+    <string name="CustomChatColorCreatorFragment__hue">Hue</string>
+    <string name="CustomChatColorCreatorFragment__saturation">Saturation</string>
+
+    <!-- CustomChatColorCreatorFragmentPage -->
+    <string name="CustomChatColorCreatorFragmentPage__save">Save</string>
+    <string name="CustomChatColorCreatorFragmentPage__edit_color">Edit color</string>
+    <plurals name="CustomChatColorCreatorFragmentPage__this_color_is_used">
+        <item quantity="one">This color is used in %1$d chat. Do you want to save changes for all chats?</item>
+        <item quantity="other">This color is used in %1$d chats. Do you want to save changes for all chats?</item>
+    </plurals>
+
+    <!-- ChatColorGradientTool -->
+    <string name="ChatColorGradientTool_top_edge_selector">Top edge selector</string>
+    <string name="ChatColorGradientTool_bottom_edge_selector">Bottom edge selector</string>
+
+    <!-- EditReactionsFragment -->
+    <string name="EditReactionsFragment__customize_reactions">Customize reactions</string>
+    <string name="EditReactionsFragment__tap_to_replace_an_emoji">Tap to replace an emoji</string>
+    <string name="EditReactionsFragment__reset">Reset</string>
+    <string name="EditReactionsFragment_save">Save</string>
+    <string name="ChatColorSelectionFragment__auto_matches_the_color_to_the_wallpaper">Auto matches the color to the wallpaper</string>
+    <string name="CustomChatColorCreatorFragment__drag_to_change_the_direction_of_the_gradient">Drag to change the direction of the gradient</string>
+
+    <!-- ChatColorsMegaphone -->
+    <string name="ChatColorsMegaphone__new_chat_colors">New Chat Colors</string>
+    <string name="ChatColorsMegaphone__we_switched_up_chat_colors">We switched up chat colors to give you more options and make chats easier to read.</string>
+    <string name="ChatColorsMegaphone__appearance">Appearance</string>
+    <string name="ChatColorsMegaphone__not_now">Not now</string>
+
+    <!-- KeyboardPagerFragment -->
+    <string name="KeyboardPagerFragment_emoji">Emoji</string>
+    <string name="KeyboardPagerFragment_open_emoji_search">Open emoji search</string>
+    <string name="KeyboardPagerFragment_open_sticker_search">Open sticker search</string>
+    <string name="KeyboardPagerFragment_open_gif_search">Open gif search</string>
+    <string name="KeyboardPagerFragment_stickers">Stickers</string>
+    <string name="KeyboardPagerFragment_backspace">Backspace</string>
+    <string name="KeyboardPagerFragment_gifs">Gifs</string>
+    <string name="KeyboardPagerFragment_search_emoji">Search emoji</string>
+    <string name="KeyboardPagerfragment_back_to_emoji">Back to emoji</string>
+    <string name="KeyboardPagerfragment_clear_search_entry">Clear search entry</string>
+    <string name="KeyboardPagerFragment_search_giphy">Search GIPHY</string>
+
+    <!-- StickerSearchDialogFragment -->
+    <string name="StickerSearchDialogFragment_search_stickers">Search stickers</string>
+    <string name="StickerSearchDialogFragment_no_results_found">No results found</string>
+    <string name="EmojiSearchFragment__no_results_found">No results found</string>
+    <string name="NotificationsSettingsFragment__unknown_ringtone">Unknown ringtone</string>
+
+    <!-- ConversationSettingsFragment -->
+    <string name="ConversationSettingsFragment__send_message">Send message</string>
+    <string name="ConversationSettingsFragment__start_video_call">Start video call</string>
+    <string name="ConversationSettingsFragment__start_audio_call">Start audio call</string>
+    <string name="ConversationSettingsFragment__message">Message</string>
+    <string name="ConversationSettingsFragment__video">Video</string>
+    <string name="ConversationSettingsFragment__audio">Audio</string>
+    <string name="ConversationSettingsFragment__call">Call</string>
+    <string name="ConversationSettingsFragment__mute">Mute</string>
+    <string name="ConversationSettingsFragment__muted">Muted</string>
+    <string name="ConversationSettingsFragment__search">Search</string>
+    <string name="ConversationSettingsFragment__disappearing_messages">Disappearing messages</string>
+    <string name="ConversationSettingsFragment__sounds_and_notifications">Sounds &amp; notifications</string>
+    <string name="ConversationSettingsFragment__contact_details">Contact details</string>
+    <string name="ConversationSettingsFragment__view_safety_number">View safety number</string>
+    <string name="ConversationSettingsFragment__block">Block</string>
+    <string name="ConversationSettingsFragment__block_group">Block group</string>
+    <string name="ConversationSettingsFragment__unblock">Unblock</string>
+    <string name="ConversationSettingsFragment__unblock_group">Unblock group</string>
+    <string name="ConversationSettingsFragment__add_to_a_group">Add to a group</string>
+    <string name="ConversationSettingsFragment__see_all">See all</string>
+    <string name="ConversationSettingsFragment__add_members">Add members</string>
+    <string name="ConversationSettingsFragment__permissions">Permissions</string>
+    <string name="ConversationSettingsFragment__requests_and_invites">Requests &amp; invites</string>
+    <string name="ConversationSettingsFragment__group_link">Group link</string>
+    <string name="ConversationSettingsFragment__add_as_a_contact">Add as a contact</string>
+    <string name="ConversationSettingsFragment__unmute">Unmute</string>
+    <string name="ConversationSettingsFragment__conversation_muted_until_s">Conversation muted until %1$s</string>
+    <string name="ConversationSettingsFragment__conversation_muted_forever">Conversation muted forever</string>
+    <string name="ConversationSettingsFragment__copied_phone_number_to_clipboard">Copied phone number to clipboard.</string>
+    <string name="ConversationSettingsFragment__phone_number">Phone number</string>
+
+    <!-- PermissionsSettingsFragment -->
+    <string name="PermissionsSettingsFragment__add_members">Add members</string>
+    <string name="PermissionsSettingsFragment__edit_group_info">Edit group info</string>
+    <string name="PermissionsSettingsFragment__all_members">All members</string>
+    <string name="PermissionsSettingsFragment__only_admins">Only admins</string>
+    <string name="PermissionsSettingsFragment__who_can_add_new_members">Who can add new members?</string>
+    <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">Who can edit this group\'s info?</string>
+
+    <!-- SoundsAndNotificationsSettingsFragment -->
+    <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Mute notifications</string>
+    <string name="SoundsAndNotificationsSettingsFragment__not_muted">Not muted</string>
+    <string name="SoundsAndNotificationsSettingsFragment__muted_until_s">Muted until %1$s</string>
+    <string name="SoundsAndNotificationsSettingsFragment__mentions">Mentions</string>
+    <string name="SoundsAndNotificationsSettingsFragment__always_notify">Always notify</string>
+    <string name="SoundsAndNotificationsSettingsFragment__do_not_notify">Do not notify</string>
+    <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">Custom notifications</string>
+
+    <!-- StickerKeyboard -->
+    <string name="StickerKeyboard__recently_used">Recently used</string>
+
+    <!-- PlaybackSpeedToggleTextView -->
+    <string name="PlaybackSpeedToggleTextView__p5x">.5x</string>
+    <string name="PlaybackSpeedToggleTextView__1x">1x</string>
+    <string name="PlaybackSpeedToggleTextView__2x">2x</string>
+
+    <!-- PaymentRecipientSelectionFragment -->
+    <string name="PaymentRecipientSelectionFragment__new_payment">New payment</string>
+
+    <!-- NewConversationActivity -->
+    <string name="NewConversationActivity__new_message">New message</string>
+
+    <!-- ContactFilterView -->
+    <string name="ContactFilterView__search_name_or_number">Search name or number</string>
+
+    <!-- VoiceNotePlayerView -->
+    <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
+
+    <!-- ContactSelectionListItem -->
+    <string name="ContactSelectionListItem__sms">SMS</string>
+    <string name="ContactSelectionListItem__dot_s">· %1$s</string>
 
     <!-- EOF -->
 

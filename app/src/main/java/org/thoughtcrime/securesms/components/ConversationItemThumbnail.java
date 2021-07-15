@@ -19,6 +19,7 @@ import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.mms.Slide;
 import org.thoughtcrime.securesms.mms.SlideClickListener;
 import org.thoughtcrime.securesms.mms.SlidesClickedListener;
+import org.thoughtcrime.securesms.util.Projection;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ConversationItemThumbnail extends FrameLayout {
   private boolean                borderless;
   private int[]                  normalBounds;
   private int[]                  gifBounds;
+  private int                    minimumThumbnailWidth;
 
   public ConversationItemThumbnail(Context context) {
     super(context);
@@ -85,6 +87,8 @@ public class ConversationItemThumbnail extends FrameLayout {
         1,
         Integer.MAX_VALUE
     };
+
+    minimumThumbnailWidth = -1;
   }
 
   @SuppressWarnings("SuspiciousNameCombination")
@@ -113,8 +117,8 @@ public class ConversationItemThumbnail extends FrameLayout {
     thumbnail.setAlpha(1f);
   }
 
-  public @Nullable CornerMask getCornerMask() {
-    return cornerMask;
+  public @NonNull Projection.Corners getCorners() {
+    return new Projection.Corners(cornerMask.getRadii());
   }
 
   public void setPulseOutliner(@NonNull Outliner outliner) {
@@ -150,6 +154,7 @@ public class ConversationItemThumbnail extends FrameLayout {
   }
 
   public void setMinimumThumbnailWidth(int width) {
+    minimumThumbnailWidth = width;
     thumbnail.setMinimumThumbnailWidth(width);
   }
 
@@ -171,6 +176,10 @@ public class ConversationItemThumbnail extends FrameLayout {
         setThumbnailBounds(gifBounds);
       } else {
         setThumbnailBounds(normalBounds);
+
+        if (minimumThumbnailWidth != -1) {
+          thumbnail.setMinimumThumbnailWidth(minimumThumbnailWidth);
+        }
       }
 
       thumbnail.setVisibility(VISIBLE);

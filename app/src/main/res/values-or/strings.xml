@@ -92,7 +92,6 @@
   <string name="BlockUnblockDialog_unblock_s">%1$sଙ୍କୁ ଅଣବ୍ଲକ୍ କରିବେ କି?</string>
   <string name="BlockUnblockDialog_block">ବ୍ଲକ୍ କରନ୍ତୁ</string>
   <string name="BlockUnblockDialog_block_and_leave">ବ୍ଲକ୍ କରନ୍ତୁ ଓ ଛାଡ଼ନ୍ତୁ</string>
-  <string name="BlockUnblockDialog_block_and_delete">ବ୍ଲକ୍ କରନ୍ତୁ ଓ ବିଲୋପ କରନ୍ତୁ</string>
   <!--BucketedThreadMedia-->
   <string name="BucketedThreadMedia_Today">ଆଜି</string>
   <string name="BucketedThreadMedia_Yesterday">ଗତକାଲି</string>
@@ -318,6 +317,8 @@
   <!--ConversationTitleView-->
   <string name="ConversationTitleView_verified">ଯାଞ୍ଚ ହେଇଥିବା</string>
   <string name="ConversationTitleView_you">ଆପଣ</string>
+  <!--ConversationTypingView-->
+  <string name="ConversationTypingView__plus_d">+%1$d</string>
   <!--CreateGroupActivity-->
   <string name="CreateGroupActivity_some_contacts_cannot_be_in_legacy_groups">କିଛି ସମ୍ପର୍କ ପୁରୁଣା ଗୋଷ୍ଠୀରେ ରହିପାରିବ ନାହିଁ</string>
   <!--CreateProfileActivity-->
@@ -472,10 +473,6 @@
     <item quantity="one">ଏହି ସଦସ୍ୟ ନୂତନ ଗୋଷ୍ଠୀରେ ଯୋଗଦେବାକୁ ସକ୍ଷମ ନୁହଁନ୍ତି, ଏବଂ ଗୋଷ୍ଠୀରୁ ଅପସାରିତ ହେବେ:</item>
     <item quantity="other">ଏହି ସଦସ୍ୟମାନେ ନୂତନ ଗୋଷ୍ଠୀରେ ଯୋଗଦେବାକୁ ସକ୍ଷମ ନୁହଁନ୍ତି, ଏବଂ ଗୋଷ୍ଠୀରୁ ଅପସାରିତ ହେବେ:</item>
   </plurals>
-  <!--GroupsV1MigrationInitiationReminder-->
-  <string name="GroupsV1MigrationInitiationReminder_to_access_new_features_like_mentions">@ଉଲ୍ଲେଖ ଏବଂ ପରିଚାଳକ ପରି ନୂତନ ବୈଶିଷ୍ଟ୍ୟଗୁଡିକୁ ପ୍ରବେଶ କରିବାକୁ, ଏହି ଗୋଷ୍ଠୀକୁ ନବୀକରଣ କରନ୍ତୁ</string>
-  <string name="GroupsV1MigrationInitiationReminder_not_now">ଏବେ ନୁହେଁ</string>
-  <string name="GroupsV1MigrationInitiationReminder_upgrade_group">ଗୋଷ୍ଠୀ ଅଦ୍ୟତନ କରନ୍ତୁ</string>
   <!--GroupsV1MigrationSuggestionsReminder-->
   <plurals name="GroupsV1MigrationSuggestionsReminder_members_couldnt_be_added_to_the_new_group">
     <item quantity="one">%1$dଜଣେ ସଦସ୍ୟ ନୂତନ ଗୋଷ୍ଠୀରେ ପୁନଃଯୋଡି ହୋଇପାରିଲେ ନାହିଁ | ଆପଣ ବର୍ତ୍ତମାନ ସେଗୁଡିକୁ ଯୋଡିବାକୁ ଚାହୁଁଛନ୍ତି କି?</item>
@@ -608,7 +605,6 @@
   <string name="ManageGroupActivity_mute_notifications">ବିଜ୍ଞପ୍ତି ମ୍ୟୁଟ୍ କରନ୍ତୁ</string>
   <string name="ManageGroupActivity_custom_notifications">କଷ୍ଟମ୍ ବିଜ୍ଞପ୍ତି</string>
   <string name="ManageGroupActivity_mentions">ଉଲ୍ଲେଖ</string>
-  <string name="ManageGroupActivity_chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string>
   <string name="ManageGroupActivity_until_s">%1$s ପର୍ଯ୍ୟନ୍ତ</string>
   <string name="ManageGroupActivity_always">ସବୁବେଳେ</string>
   <string name="ManageGroupActivity_off">ବନ୍ଦ</string>
@@ -650,32 +646,11 @@
   <string name="ManageProfileFragment_your_username">ଆପଣଙ୍କ ବ୍ୟବହାରିକ ନାମ</string>
   <string name="ManageProfileFragment_failed_to_set_avatar">ଅବତାର ସେଟ୍ କରିବାରେ ବିଫଳ</string>
   <!--ManageRecipientActivity-->
-  <string name="ManageRecipientActivity_add_to_system_contacts">ସିଷ୍ଟମ୍ ଯୋଗାଯୋଗରେ ଯୋଡ଼ନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_this_person_is_in_your_contacts">ଏହି ବ୍ୟକ୍ତି ଆପଣଙ୍କ ଯୋଗାଯୋଗରେ ଅଛନ୍ତି</string>
-  <string name="ManageRecipientActivity_disappearing_messages">ଉଭାନ ହୋଇଯାଉଥିବା ବାର୍ତ୍ତାଗଡ଼ିକ</string>
-  <string name="ManageRecipientActivity_chat_color">ଚାଟ୍ ରଙ୍ଗ</string>
-  <string name="ManageRecipientActivity_chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string>
-  <string name="ManageRecipientActivity_block">ବ୍ଲକ୍ କରନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_unblock">ଅଣବ୍ଲକ୍ କରନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_view_safety_number">ସୁରକ୍ଷା ନମ୍ବର ଦେଖନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_mute_notifications">ବିଜ୍ଞପ୍ତି ମ୍ୟୁଟ୍ କରନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_custom_notifications">କଷ୍ଟମ୍ ବିଜ୍ଞପ୍ତି</string>
-  <string name="ManageRecipientActivity_until_s">%1$s ପର୍ଯ୍ୟନ୍ତ</string>
-  <string name="ManageRecipientActivity_always">ସବୁବେଳେ</string>
-  <string name="ManageRecipientActivity_off">ବନ୍ଦ</string>
-  <string name="ManageRecipientActivity_on">ଚାଲୁ</string>
-  <string name="ManageRecipientActivity_add_to_a_group">ଏକ ଗୋଷ୍ଠୀରେ ଯୋଡ଼ନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_view_all_groups">ସମସ୍ତ ଗୋଷ୍ଠୀ ଦେଖନ୍ତୁ</string>
-  <string name="ManageRecipientActivity_see_all">ସମସ୍ତ ଦେଖନ୍ତୁ</string>
   <string name="ManageRecipientActivity_no_groups_in_common">କୌଣସି ସମାନ ଗୋଷ୍ଠୀ ନାହିଁ</string>
   <plurals name="ManageRecipientActivity_d_groups_in_common">
     <item quantity="one">%dଟିଏ ସମାନ ଗୋଷ୍ଠୀ ଅଛି</item>
     <item quantity="other">%dଟି ସମାନ ଗୋଷ୍ଠୀ ଅଛି</item>
   </plurals>
-  <string name="ManageRecipientActivity_message_description">ବାର୍ତ୍ତା</string>
-  <string name="ManageRecipientActivity_voice_call_description">ଭଏସ୍ କଲ୍</string>
-  <string name="ManageRecipientActivity_insecure_voice_call_description">ଅସୁରକ୍ଷିତ ଭଏସ୍ କଲ୍</string>
-  <string name="ManageRecipientActivity_video_call_description">ଭିଡ଼ିଓ କଲ୍</string>
   <plurals name="GroupMemberList_invited">
     <item quantity="one">%1$s ଜଣଙ୍କୁ ଆମନ୍ତ୍ରିତ କଲେ</item>
     <item quantity="other">%1$s,%2$dଜଣ ଲୋକଙ୍କୁ ଆମନ୍ତ୍ରିତ କଲେ</item>
@@ -834,6 +809,7 @@
   <string name="Megaphones_new_group">ନୂତନ ଗୋଷ୍ଠୀ</string>
   <string name="Megaphones_invite_friends">ବନ୍ଧୁମାନଙ୍କୁ ଆମନ୍ତ୍ରଣ କରନ୍ତୁ</string>
   <string name="Megaphones_use_sms">ଏସ୍ଏମ୍ଏସ୍ ବ୍ୟବହାର କରନ୍ତୁ</string>
+  <string name="Megaphones_appearance">ଦୃଶ୍ୟ</string>
   <!--NotificationBarManager-->
   <string name="NotificationBarManager_signal_call_in_progress">Signal କଲ୍ ଚାଲୁଅଛି</string>
   <string name="NotificationBarManager__establishing_signal_call">Signal କଲ୍ ସ୍ଥାପନ କରାଯାଉଛି</string>
@@ -872,6 +848,7 @@
   <!--MediaRepository-->
   <string name="MediaRepository_all_media">ସମସ୍ତ ମିଡ଼ିଆ</string>
   <string name="MediaRepository__camera">କ୍ୟାମେରା</string>
+  <!--MessageDecryptionUtil-->
   <!--MessageRecord-->
   <string name="MessageRecord_unknown">ଅଜଣା</string>
   <string name="MessageRecord_message_encrypted_with_a_legacy_protocol_version_that_is_no_longer_supported">Signal ର ପୁରୁଣା ସଂସ୍କରଣ ବ୍ୟବହାର କରି ଏନକ୍ରିପ୍ଟ ହୋଇଥିବା ଏକ ବାର୍ତ୍ତା ଗ୍ରହଣ କଲା ଯାହା ଆଉ ସମର୍ଥିତ ନୁହେଁ | ଦୟାକରି ପ୍ରେରକଙ୍କୁ ସାମ୍ପ୍ରତିକ ସଂସ୍କରଣକୁ ଅଦ୍ୟତନ କରିବାକୁ ଏବଂ ବାର୍ତ୍ତା ପଠାଇବାକୁ କୁହନ୍ତୁ</string>
@@ -971,6 +948,7 @@
   <string name="MessageRecord_you_changed_the_group_name_to_s">ଆପଣ ଗୋଷ୍ଠୀ ନାମକୁ \"%1$s\" କୁ ପରିବର୍ତ୍ତନ କରିଛନ୍ତି</string>
   <string name="MessageRecord_s_changed_the_group_name_to_s">%1$s ଗୋଷ୍ଠୀ ନାମକୁ \"%2$s\"  କୁ ପରିବର୍ତ୍ତନ କଲେ</string>
   <string name="MessageRecord_the_group_name_has_changed_to_s">ଗୋଷ୍ଠୀ ନାମ \"%1$s\" କୁ ପରିବର୍ତ୍ତିତ ହୋଇଛି</string>
+  <!--GV2 description change-->
   <!--GV2 avatar change-->
   <string name="MessageRecord_you_changed_the_group_avatar">ଆପଣ ଗୋଷ୍ଠୀ ଅବତାର ପରିବର୍ତ୍ତନ କଲେ।</string>
   <string name="MessageRecord_s_changed_the_group_avatar">%1$s ଗୋଷ୍ଠୀ ଅବତାର ପରିବର୍ତ୍ତନ କଲେ</string>
@@ -1062,6 +1040,7 @@
   <string name="MessageRequestBottomView_do_you_want_to_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">ଏହି ଗୋଷ୍ଠୀରେ ଯୋଗ ଦିଅନ୍ତୁ ଏବଂ ଏହାର ନାମ ଏବଂ ଛବି ଏହାର ସଦସ୍ୟମାନଙ୍କ ସହିତ ଅଂଶୀଦାର କରନ୍ତୁ? ତୁମେ ଗ୍ରହଣ ନକରିବା ପର୍ଯ୍ୟନ୍ତ ତୁମେ ସେମାନଙ୍କ ବାର୍ତ୍ତା ଦେଖିଛ ବୋଲି ସେମାନେ ଜାଣିବେ ନାହିଁ</string>
   <string name="MessageRequestBottomView_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">ଏହି ଗୋଷ୍ଠୀରେ ଯୋଗ ଦେବେ? ତୁମେ ଗ୍ରହଣ ନକରିବା ପର୍ଯ୍ୟନ୍ତ ତୁମେ ସେମାନଙ୍କ ବାର୍ତ୍ତା ଦେଖିଛ ବୋଲି ସେମାନେ ଜାଣିବେ ନାହିଁ</string>
   <string name="MessageRequestBottomView_unblock_this_group_and_share_your_name_and_photo_with_its_members">ଏହି ଗୋଷ୍ଠୀକୁ ଅଣଅବରୋଧ କରନ୍ତୁ ଏବଂ ଆପଣଙ୍କର ନାମ ଏବଂ ଛବି ଏହାର ସଦସ୍ୟମାନଙ୍କ ସହିତ ଅଂଶୀଦାର କରନ୍ତୁ? ଆପଣ ସେଗୁଡିକୁ ଅବରୋଧ ନକରିବା ପର୍ଯ୍ୟନ୍ତ ଆପଣ କୌଣସି ବାର୍ତ୍ତା ଗ୍ରହଣ କରିବେ ନାହିଁ</string>
+  <string name="MessageRequestProfileView_view">ଦେଖନ୍ତୁ</string>
   <string name="MessageRequestProfileView_member_of_one_group">%1$s ର ସଦସ୍ୟ</string>
   <string name="MessageRequestProfileView_member_of_two_groups">%1$sଏବଂ %2$s ର ସଦସ୍ୟ</string>
   <string name="MessageRequestProfileView_member_of_many_groups">%1$s,%2$s ଏବଂ %3$s ର ସଦସ୍ୟ</string>
@@ -1101,10 +1080,6 @@
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">ଏହା ଦେଖାଯାଉଛି ଯେ ଆପଣ ଏକ 3ତୀୟ ପକ୍ଷ ସ୍କାନର୍ ବ୍ୟବହାର କରି ଏକ Signal ଉପକରଣ ଲିଙ୍କ୍ କରିବାକୁ ଚେଷ୍ଟା କରୁଛନ୍ତି | ଆପଣଙ୍କର ସୁରକ୍ଷା ପାଇଁ, ଦୟାକରି Signal ଭିତରୁ କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ</string>
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">ଏକ କ୍ୟୁ.ଆର କୋଡ୍ ସ୍କାନ୍ କରିବା ପାଇଁ Signal କ୍ୟାମେରା ଅନୁମତି ଆବଶ୍ୟକ କରେ, କିନ୍ତୁ ଏହାକୁ ସ୍ଥାୟୀ ଭାବରେ ପ୍ରତ୍ୟାଖ୍ୟାନ କରାଯାଇଛି | ଦୟାକରି ଆପ୍ ସେଟିଂସମୂହକୁ ଯାଇଁ, \"ଅନୁମତି\" ଚୟନ କରନ୍ତୁ ଏବଂ \"କ୍ୟାମେରା\" ସକ୍ଷମ କରନ୍ତୁ</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">କ୍ୟାମେରା ଅନୁମତି ବିନା ଏକ କ୍ୟୁ.ଆର କୋଡ୍ ସ୍କାନ୍ କରିବାରେ ଅସମର୍ଥ</string>
-  <!--ExpirationDialog-->
-  <string name="ExpirationDialog_disappearing_messages">ଉଭାନ ହୋଇଯାଉଥିବା ବାର୍ତ୍ତାଗଡ଼ିକ</string>
-  <string name="ExpirationDialog_your_messages_will_not_expire">ଆପଣଙ୍କର ବାର୍ତ୍ତାର ସମୟ ସମାପ୍ତ ହେବ ନାହିଁ</string>
-  <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">ଏହି ବାର୍ତ୍ତାଳାପରେ ପଠାଯାଇଥିବା ଏବଂ ଗ୍ରହଣ କରାଯାଇଥିବା ସନ୍ଦେଶଗୁଡ଼ିକ ଦେଖିବାର %s ପରେ  ଅଦୃଶ୍ୟ ହୋଇଯିବ</string>
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">ଏବେ ଅଦ୍ୟତନ କରନ୍ତୁ</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Signal ର ଏହି ସଂସ୍କରଣର ସମୟ ସମାପ୍ତ ହୋଇଛି | ବାର୍ତ୍ତା ପଠାଇବା ଏବଂ ଗ୍ରହଣ କରିବା ପାଇଁ ବର୍ତ୍ତମାନ ଅଦ୍ୟତନ କରନ୍ତୁ</string>
@@ -1162,6 +1137,9 @@
   <string name="ReactionsConversationView_plus">+%1$d</string>
   <!--ReactionsRecipientAdapter-->
   <string name="ReactionsRecipientAdapter_you">ଆପଣ</string>
+  <!--RecaptchaRequiredBottomSheetFragment-->
+  <!--Recipient-->
+  <string name="Recipient_you">ଆପଣ</string>
   <!--RecipientPreferencesActivity-->
   <string name="RecipientPreferenceActivity_block">ବ୍ଲକ୍ କରନ୍ତୁ</string>
   <string name="RecipientPreferenceActivity_unblock">ଅଣବ୍ଲକ୍ କରନ୍ତୁ</string>
@@ -1214,12 +1192,14 @@
   <string name="CallParticipantView__cant_receive_audio_video_from_s">ଅଡିଓ &amp; amp ଗ୍ରହଣ କରିହଉ ନାହିଁ ; %1$s ରୁ ଭିଡିଓ</string>
   <string name="CallParticipantView__cant_receive_audio_and_video_from_s">%1$sଙ୍କ ଠାରୁ ଅଡିଓ ଏବଂ ଭିଡିଓ ଗ୍ରହଣ କରିପାରିବ ନାହିଁ</string>
   <string name="CallParticipantView__this_may_be_Because_they_have_not_verified_your_safety_number_change">ଏହା ହୋଇପାରେ କାରଣ ସେମାନେ ଆପଣଙ୍କର \"ସୁରକ୍ଷା ନମ୍ବର ପରିବର୍ତ୍ତନ\" ଯାଞ୍ଚ କରିନାହାଁନ୍ତି, ସେମାନଙ୍କ ଉପକରଣ ରେ ଏକ ସମସ୍ୟା ଅଛି, କିମ୍ବା ସେମାନେ ଆପଣଙ୍କୁ ଅବରୋଧ କରିଛନ୍ତି</string>
+  <!--CallToastPopupWindow-->
   <!--ProxyBottomSheetFragment-->
   <string name="ProxyBottomSheetFragment_proxy_server">ପ୍ରକ୍ସି ସର୍ଭର</string>
   <string name="ProxyBottomSheetFragment_proxy_address">ପ୍ରକ୍ସି ଠିକଣା </string>
   <string name="ProxyBottomSheetFragment_do_you_want_to_use_this_proxy_address">ଆପଣ ଏହି ପ୍ରକ୍ସି ଠିକଣା ବ୍ୟବହାର କରିବାକୁ ଚାହାଁନ୍ତି କି?</string>
   <string name="ProxyBottomSheetFragment_use_proxy">ପ୍ରକ୍ସି ବ୍ୟବହାର କରନ୍ତୁ </string>
   <string name="ProxyBottomSheetFragment_successfully_connected_to_proxy">ପ୍ରକ୍ସି ସହିତ ସଫଳତାର ସହିତ ସଂଯୁକ୍ତ</string>
+  <!--RecaptchaProofActivity-->
   <!--RegistrationActivity-->
   <string name="RegistrationActivity_select_your_country">ନିଜ ଦେଶ ବାଛନ୍ତୁ</string>
   <string name="RegistrationActivity_you_must_specify_your_country_code">ଆପଣ ନିଶ୍ଚିତ ଭାବରେ ଯୋଗାଇବେ ଆପଣଙ୍କର
@@ -1494,6 +1474,7 @@
   <!--SingleRecipientNotificationBuilder-->
   <string name="SingleRecipientNotificationBuilder_signal">Signal</string>
   <string name="SingleRecipientNotificationBuilder_new_message">ନୂତନ ବାର୍ତ୍ତା</string>
+  <string name="SingleRecipientNotificationBuilder_you">ଆପଣ</string>
   <!--ThumbnailView-->
   <string name="ThumbnailView_Play_video_description">ଭିଡ଼ିଓ ଚଲାନ୍ତୁ</string>
   <string name="ThumbnailView_Has_a_caption_description">ଏକ ଲେଖା ଅଛି</string>
@@ -1600,6 +1581,7 @@
   <string name="ConversationUpdateItem_call_is_full">କଲ୍ ଭର୍ତ୍ତି ଅଛି</string>
   <string name="ConversationUpdateItem_invite_friends">ବନ୍ଧୁମାନଙ୍କୁ ଆମନ୍ତ୍ରଣ କରନ୍ତୁ</string>
   <string name="ConversationUpdateItem_enable_call_notifications">କଲ ବିଜ୍ଞପ୍ତି ଚାଲୁ କରନ୍ତୁ</string>
+  <string name="ConversationUpdateItem_view">ଦେଖନ୍ତୁ</string>
   <!--audio_view-->
   <string name="audio_view__play_pause_accessibility_description">ଚଲାନ୍ତୁ … ବିରାମ</string>
   <string name="audio_view__download_accessibility_description">ଡାଉନଲୋଡ୍</string>
@@ -1713,6 +1695,7 @@
   <!--prompt_mms_activity-->
   <string name="prompt_mms_activity__signal_requires_mms_settings_to_deliver_media_and_group_messages">ଆପଣଙ୍କର ବେତାର ବାହକ ମାଧ୍ୟମରେ ମିଡିଆ ଏବଂ ଗୋଷ୍ଠୀ ବାର୍ତ୍ତା ବିତରଣ କରିବାକୁ Signal MMS ସେଟିଙ୍ଗ୍ ଆବଶ୍ୟକ କରେ | ଆପଣଙ୍କର ଉପକରଣ ଏହି ସୂଚନା ଉପଲବ୍ଧ କରାଏ ନାହିଁ, ଯାହାକି ଲକ୍ ହୋଇଥିବା ଉପକରଣ ଏବଂ ଅନ୍ୟାନ୍ୟ ପ୍ରତିବନ୍ଧକ ବିନ୍ୟାସ ପାଇଁ ବେଳେବେଳେ ସତ୍ୟ ଅଟେ</string>
   <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">ମିଡିଆ ଏବଂ ଗୋଷ୍ଠୀ ବାର୍ତ୍ତା ପଠାଇବାକୁ, \'ଠିକ ଅଛି\' ଟ୍ୟାପ୍ କରନ୍ତୁ ଏବଂ ଅନୁରୋଧ କରାଯାଇଥିବା ସେଟିଙ୍ଗ୍ ସଂପୂର୍ଣ୍ଣ କରନ୍ତୁ | ଆପଣଙ୍କ ବାହକ ପାଇଁ MMS ସେଟିଂସମୂହ ସାଧାରଣତ \'ଆପଣଙ୍କର ବାହକ APN\' ସନ୍ଧାନ କରି ଖୋଜାଯାଇ ପାରେ | ଆପଣଙ୍କୁ ଏହା କେବଳ ଥରେ କରିବାକୁ ପଡିବ</string>
+  <!--BadDecryptLearnMoreDialog-->
   <!--profile_create_activity-->
   <string name="CreateProfileActivity_first_name_required">ପ୍ରଥମ ନାମ (ଆବଶ୍ୟକ)</string>
   <string name="CreateProfileActivity_last_name_optional">ଶେଷ ନାମ (ବୈକଳ୍ପିକ)</string>
@@ -1732,7 +1715,7 @@
   <string name="EditAboutFragment_taking_a_break">ଗୋଟେ ବିରତି ନିଆହଉଛି</string>
   <string name="EditAboutFragment_working_on_something_new">କୌଣସି ଗୋଟେ ନୂଆ ଜିନିଷରେ କାମ କରନ୍ତୁ</string>
   <!--EditProfileFragment-->
-  <string name="EditProfileFragment__edit_group_name_and_photo">ଗୋଷ୍ଠୀ ନାମ ଏବଂ ଛବି ସଂପାଦନ କରନ୍ତୁ</string>
+  <string name="EditProfileFragment__edit_group">ଗୋଷ୍ଠୀ ସମ୍ପାଦନ କରନ୍ତୁ</string>
   <string name="EditProfileFragment__group_name">ଗୋଷ୍ଠୀ ନାମ</string>
   <!--EditProfileNameFragment-->
   <string name="EditProfileNameFragment_your_name">ଆପଣଙ୍କ ନାମ</string>
@@ -1935,7 +1918,6 @@
   <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">ଯଦି ପଠନ ରସିଦ ଅକ୍ଷମ ହୋଇଛି, ଆପଣ ଅନ୍ୟମାନଙ୍କଠାରୁ ପଠନ ରସିଦ ଦେଖିବାକୁ ସମର୍ଥ ହେବେ ନାହିଁ</string>
   <string name="preferences__typing_indicators">ଟାଇପ୍ ସୂଚକ</string>
   <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">ଯଦି ଟାଇପ୍ ସୂଚକ ଅକ୍ଷମ ହୋଇଛି, ଆପଣ ଅନ୍ୟମାନଙ୍କଠାରୁ ଟାଇପ୍ ସୂଚକ ଦେଖିବାକୁ ସମର୍ଥ ହେବେ ନାହିଁ</string>
-  <string name="preferences__request_keyboard_to_disable_personalized_learning">ବ୍ୟକ୍ତିଗତ ଶିକ୍ଷଣକୁ ଅକ୍ଷମ କରିବାକୁ କୀବୋର୍ଡ୍ ଅନୁରୋଧ | ଏହି ସେଟିଂ ଏକ ଗ୍ୟାରେଣ୍ଟି ନୁହେଁ, ଏବଂ ଆପଣଙ୍କର କୀବୋର୍ଡ୍ ଏହାକୁ ଅଣଦେଖା କରିପାରେ</string>
   <string name="preferences_app_protection__blocked_users">ବ୍ଲକ୍ ହୋଇଥିବା ବ୍ୟବହାରକାରୀ</string>
   <string name="preferences_chats__when_using_mobile_data">ମୋବାଇଲ୍ ଡାଟା ବ୍ୟବହାର କରିବାବେଳେ</string>
   <string name="preferences_chats__when_using_wifi">ୱାଇ-ଫାଇ ବ୍ୟବହାର କରିବାବେଳେ</string>
@@ -1975,8 +1957,6 @@
   <string name="preferences_data_and_storage__calls">କଲ୍</string>
   <string name="preferences_data_and_storage__use_less_data_for_calls">କଲ୍ ପାଇଁ କମ୍ ଡାଟା ବ୍ୟବହାର କରନ୍ତୁ</string>
   <string name="preferences_data_and_storage__never">କଦାପି ନୁହେଁ</string>
-  <string name="preferences_data_and_storage__wifi_and_cellular">ୱାଇଫାଇ ଏବଂ ସେଲୁଲାର୍</string>
-  <string name="preferences_data_and_storage__cellular_only">କେବଳ ସେଲୁଲାର୍</string>
   <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">କମ୍ ଡାଟା ବ୍ୟବହାର କରିବା ଦ୍ୱାରା ଖରାପ ନେଟୱାର୍କରେ କଲ୍ ଉନ୍ନତ ହୋଇପାରେ</string>
   <string name="preferences_notifications__messages">ବାର୍ତ୍ତା</string>
   <string name="preferences_notifications__events">ଘଟଣା</string>
@@ -2001,7 +1981,6 @@
   <string name="preferences_off">ବନ୍ଦ</string>
   <string name="preferences_on">ଚାଲୁ</string>
   <string name="preferences_proxy_address">ପ୍ରକ୍ସି ଠିକଣା </string>
-  <string name="preferences_only_use_a_proxy_if">ଯଦି ଆପଣ ସେଲୁଲାର୍ କିମ୍ବା ୱାଇ-ଫାଇରେ Signal ସହିତ ସଂଯୋଗ କରିବାକୁ ସକ୍ଷମ ନୁହଁନ୍ତି ତେବେ କେବଳ ଏକ ପ୍ରକ୍ସି ବ୍ୟବହାର କରନ୍ତୁ</string>
   <string name="preferences_share">ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="preferences_save">ସଞ୍ଚୟ କରନ୍ତୁ</string>
   <string name="preferences_connecting_to_proxy">ପ୍ରକ୍ସି ସହିତ ସଂଯୋଜିତ ହେଉଛି …</string>
@@ -2405,7 +2384,6 @@
   <string name="RecipientBottomSheet_add_to_a_group">ଏକ ଗୋଷ୍ଠୀରେ ଯୋଡ଼ନ୍ତୁ</string>
   <string name="RecipientBottomSheet_add_to_another_group">ଅନ୍ୟ ଏକ ଗୋଷ୍ଠୀରେ ଯୋଡ଼ନ୍ତୁ</string>
   <string name="RecipientBottomSheet_view_safety_number">ସୁରକ୍ଷା ନମ୍ବର ଦେଖନ୍ତୁ</string>
-  <string name="RecipientBottomSheet_make_group_admin">ଗୋଷ୍ଠୀ ପରିଚାଳକ ବନାନ୍ତୁ</string>
   <string name="RecipientBottomSheet_remove_as_admin">ପରିଚାଳକ ପଦବୀରୁ ହଟାନ୍ତୁ</string>
   <string name="RecipientBottomSheet_remove_from_group">ଗୋଷ୍ଠୀରୁ ହଟାନ୍ତୁ</string>
   <string name="RecipientBottomSheet_message_description">ବାର୍ତ୍ତା</string>
@@ -2505,7 +2483,6 @@
   <!--ShareActivity-->
   <string name="ShareActivity__share">ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="ShareActivity__send">ପଠାନ୍ତୁ</string>
-  <string name="ShareActivity__s_comma">%1$s</string>
   <string name="ShareActivity__sharing_to_multiple_chats_is">ଏକାଧିକ ବାର୍ତ୍ତାଳାପରେ ଅଂଶୀଦାର କରିବା କେବଳ Signal ବାର୍ତ୍ତା ପାଇଁ ସମର୍ଥିତ</string>
   <!--MultiShareDialogs-->
   <string name="MultiShareDialogs__failed_to_send_to_some_users">କିଛି ଉପଭୋକ୍ତାଙ୍କୁ ପଠାଇବାରେ ବିଫଳ</string>
@@ -2515,17 +2492,13 @@
   <!--ChatWallpaperActivity-->
   <string name="ChatWallpaperActivity__chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string>
   <!--ChatWallpaperFragment-->
+  <string name="ChatWallpaperFragment__chat_color">ଚାଟ୍ ରଙ୍ଗ</string>
   <string name="ChatWallpaperFragment__set_wallpaper">କାନ୍ଥଛବି ସେଟ୍ କରନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">ଅନ୍ଧାର ଥିମ୍ କାନ୍ଥଛବିକୁ ଅନ୍ଧାରୁଆ କରିଦିଏ</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper">କାନ୍ଥଛବି ହଟାନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">ଏହି ବାର୍ତ୍ତାଳାପ ପାଇଁ କାନ୍ଥଛବି ହଟାନ୍ତୁ?</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">କାନ୍ଥଛବି ହଟାନ୍ତୁ? ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ କରିଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବିଗୁଡିକୁ ଏହା ସଫା କରିବ ନାହିଁ</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers">ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃନିର୍ଦ୍ଧାରିତ କରନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ ହୋଇଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବି ସମେତ ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃସେଟ୍ କରନ୍ତୁ? </string>
   <string name="ChatWallpaperFragment__contact_name">ସମ୍ପର୍କର ନାମ</string>
   <string name="ChatWallpaperFragment__reset">ରିସେଟ୍ କରନ୍ତୁ</string>
   <string name="ChatWallpaperFragment__clear">ସଫା କରନ୍ତୁ</string>
   <string name="ChatWallpaperFragment__wallpaper_preview_description">କାନ୍ଥଛବି ପୂର୍ବାବଲୋକନ</string>
+  <string name="ChatWallpaperFragment__reset_all_wallpapers">ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃନିର୍ଦ୍ଧାରିତ କରନ୍ତୁ</string>
   <!--ChatWallpaperSelectionFragment-->
   <string name="ChatWallpaperSelectionFragment__choose_from_photos">ଛବି ସଂଗ୍ରହରୁ ବାଛନ୍ତୁ</string>
   <string name="ChatWallpaperSelectionFragment__presets">ପୂର୍ବନିର୍ଦ୍ଧାରିତ</string>
@@ -2575,5 +2548,81 @@
   <string name="CanNotSendPaymentDialog__cant_send_payment">ପଇସା ଦେୟ ହେଇ ପାରୁନାହିଁ </string>
   <string name="CanNotSendPaymentDialog__to_send_a_payment_to_this_user">ଏହି ଉପଭୋକ୍ତାଙ୍କୁ ଏକ ଦେୟ ପଠାଇବାକୁ ସେମାନେ ଆପଣଙ୍କଠାରୁ ଏକ ବାର୍ତ୍ତା ଅନୁରୋଧ ଗ୍ରହଣ କରିବା ଆବଶ୍ୟକ କରନ୍ତି | ଏକ ବାର୍ତ୍ତା ଅନୁରୋଧ ସୃଷ୍ଟି କରିବାକୁ ସେମାନଙ୍କୁ ଏକ ବାର୍ତ୍ତା ପଠାନ୍ତୁ |</string>
   <string name="CanNotSendPaymentDialog__send_a_message">ଗୋଟେ ବାର୍ତ୍ତା ପଠାନ୍ତୁ</string>
+  <!--GroupsInCommonMessageRequest-->
+  <string name="GroupsInCommonMessageRequest__okay">ଠିକ୍ ଅଛି</string>
+  <!--GroupDescriptionDialog-->
+  <!--QualitySelectorBottomSheetDialog-->
+  <string name="QualitySelectorBottomSheetDialog__high">ଉଚ୍ଚ</string>
+  <!--AppSettingsFragment-->
+  <!--AccountSettingsFragment-->
+  <!--ChatsSettingsFragment-->
+  <string name="ChatsSettingsFragment__enter_key_sends">ଏଣ୍ଟର ଦବେଇଲେ ପଠାଯିବ</string>
+  <!--SmsSettingsFragment-->
+  <!--NotificationsSettingsFragment-->
+  <string name="NotificationsSettingsFragment__messages">ବାର୍ତ୍ତା</string>
+  <string name="NotificationsSettingsFragment__calls">କଲ୍</string>
+  <!--PrivacySettingsFragment-->
+  <string name="PrivacySettingsFragment__disappearing_messages">ଉଭାନ ହୋଇଯାଉଥିବା ବାର୍ତ୍ତାଗଡ଼ିକ</string>
+  <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">ସାମ୍ପ୍ରତିକ ତାଲିକାରେ ଏବଂ ଆପ୍ ଭିତରେ ସ୍କ୍ରିନସଟ୍କ କୁ ଅବରୋଧ କରନ୍ତୁ</string>
+  <!--AdvancedPrivacySettingsFragment-->
+  <!--ExpireTimerSettingsFragment-->
+  <string name="ExpireTimerSettingsFragment__off">ବନ୍ଦ</string>
+  <string name="ExpireTimerSettingsFragment__save">ସଞ୍ଚୟ କରନ୍ତୁ</string>
+  <!--HelpSettingsFragment-->
+  <string name="HelpSettingsFragment__contact_us">ଆମକୁ ଯୋଗଯୋଗ କରନ୍ତୁ</string>
+  <string name="HelpSettingsFragment__terms_amp_privacy_policy">ସର୍ତ୍ତାବଳୀ &amp; amp; ଗୋପନୀୟତା ନୀତି</string>
+  <!--DataAndStorageSettingsFragment-->
+  <string name="DataAndStorageSettingsFragment__calls">କଲ୍</string>
+  <!--ChatColorSelectionFragment-->
+  <string name="ChatColorSelectionFragment__chat_color">ଚାଟ୍ ରଙ୍ଗ</string>
+  <string name="ChatColorSelectionFragment__edit">ସମ୍ପାଦନ</string>
+  <string name="ChatColorSelectionFragment__delete">ବିଲୋପ କରନ୍ତୁ</string>
+  <!--CustomChatColorCreatorFragment-->
+  <!--CustomChatColorCreatorFragmentPage-->
+  <string name="CustomChatColorCreatorFragmentPage__save">ସଞ୍ଚୟ କରନ୍ତୁ</string>
+  <!--ChatColorGradientTool-->
+  <!--EditReactionsFragment-->
+  <string name="EditReactionsFragment__reset">ରିସେଟ୍ କରନ୍ତୁ</string>
+  <string name="EditReactionsFragment_save">ସଞ୍ଚୟ କରନ୍ତୁ</string>
+  <!--ChatColorsMegaphone-->
+  <string name="ChatColorsMegaphone__appearance">ଦୃଶ୍ୟ</string>
+  <string name="ChatColorsMegaphone__not_now">ଏବେ ନୁହେଁ</string>
+  <!--KeyboardPagerFragment-->
+  <string name="KeyboardPagerFragment_stickers">ଷ୍ଟିକର୍</string>
+  <!--StickerSearchDialogFragment-->
+  <!--ConversationSettingsFragment-->
+  <string name="ConversationSettingsFragment__message">ବାର୍ତ୍ତା</string>
+  <string name="ConversationSettingsFragment__video">ଭିଡ଼ିଓ</string>
+  <string name="ConversationSettingsFragment__audio">ଅଡ଼ିଓ</string>
+  <string name="ConversationSettingsFragment__call">କଲ୍</string>
+  <string name="ConversationSettingsFragment__mute">ନୀରବ</string>
+  <string name="ConversationSettingsFragment__search">ସନ୍ଧାନ କରନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__disappearing_messages">ଉଭାନ ହୋଇଯାଉଥିବା ବାର୍ତ୍ତାଗଡ଼ିକ</string>
+  <string name="ConversationSettingsFragment__view_safety_number">ସୁରକ୍ଷା ନମ୍ବର ଦେଖନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__block">ବ୍ଲକ୍ କରନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__block_group">ଗୋଷ୍ଠୀ ବ୍ଲକ୍ କରନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__unblock">ଅଣବ୍ଲକ୍ କରନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__unblock_group">ଗୋଷ୍ଠୀ ଅଣବ୍ଲକ୍ କରନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__add_to_a_group">ଏକ ଗୋଷ୍ଠୀରେ ଯୋଡ଼ନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__see_all">ସମସ୍ତ ଦେଖନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__add_members">ସଦସ୍ୟ ଯୋଡ଼ନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__group_link">ଗୋଷ୍ଠୀ ଲିଙ୍କ୍</string>
+  <string name="ConversationSettingsFragment__unmute">ନୀରବତା ଭାଙ୍ଗନ୍ତୁ</string>
+  <string name="ConversationSettingsFragment__phone_number">ଫୋନ୍ ନମ୍ବର</string>
+  <!--PermissionsSettingsFragment-->
+  <string name="PermissionsSettingsFragment__add_members">ସଦସ୍ୟ ଯୋଡ଼ନ୍ତୁ</string>
+  <string name="PermissionsSettingsFragment__edit_group_info">ଗୋଷ୍ଠୀ ସୂଚନା ସମ୍ପାଦନ କରନ୍ତୁ</string>
+  <string name="PermissionsSettingsFragment__all_members">ସମସ୍ତ ସଦସ୍ୟ</string>
+  <string name="PermissionsSettingsFragment__only_admins">କେବଳ ବ୍ୟବସ୍ଥାପକମାନେ</string>
+  <string name="PermissionsSettingsFragment__who_can_add_new_members">ନୂତନ ସଦସ୍ୟ କିଏ ଯୋଡ଼ିପାରିବେ?</string>
+  <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">ଗୋଷ୍ଠୀ ସୂଚନା କିଏ ସମ୍ପାଦନ କରିପାରିବେ?</string>
+  <!--SoundsAndNotificationsSettingsFragment-->
+  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">ବିଜ୍ଞପ୍ତି ମ୍ୟୁଟ୍ କରନ୍ତୁ</string>
+  <string name="SoundsAndNotificationsSettingsFragment__mentions">ଉଲ୍ଲେଖ</string>
+  <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">କଷ୍ଟମ୍ ବିଜ୍ଞପ୍ତି</string>
+  <!--StickerKeyboard-->
+  <!--PlaybackSpeedToggleTextView-->
+  <!--VoiceNotePlayerView-->
+  <string name="VoiceNotePlayerView__s_dot_s">%1$s . %2$s</string>
   <!--EOF-->
 </resources>

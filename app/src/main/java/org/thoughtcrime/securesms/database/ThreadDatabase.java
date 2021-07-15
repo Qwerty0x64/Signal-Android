@@ -89,9 +89,9 @@ public class ThreadDatabase extends Database {
   public  static final String ID                     = "_id";
   public  static final String DATE                   = "date";
   public  static final String MESSAGE_COUNT          = "message_count";
-  public  static final String RECIPIENT_ID           = "recipient_ids";
+  public  static final String RECIPIENT_ID           = "thread_recipient_id";
   public  static final String SNIPPET                = "snippet";
-  private static final String SNIPPET_CHARSET        = "snippet_cs";
+  private static final String SNIPPET_CHARSET        = "snippet_charset";
   public  static final String READ                   = "read";
   public  static final String UNREAD_COUNT           = "unread_count";
   public  static final String TYPE                   = "type";
@@ -110,7 +110,7 @@ public class ThreadDatabase extends Database {
   private static final String LAST_SCROLLED          = "last_scrolled";
           static final String PINNED                 = "pinned";
 
-  public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + ID                     + " INTEGER PRIMARY KEY, " +
+  public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + ID                     + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                                                                   DATE                   + " INTEGER DEFAULT 0, " +
                                                                                   MESSAGE_COUNT          + " INTEGER DEFAULT 0, " +
                                                                                   RECIPIENT_ID           + " INTEGER, " +
@@ -135,7 +135,7 @@ public class ThreadDatabase extends Database {
                                                                                   PINNED                 + " INTEGER DEFAULT 0);";
 
   public static final String[] CREATE_INDEXS = {
-    "CREATE INDEX IF NOT EXISTS thread_recipient_ids_index ON " + TABLE_NAME + " (" + RECIPIENT_ID + ");",
+    "CREATE INDEX IF NOT EXISTS thread_recipient_id_index ON " + TABLE_NAME + " (" + RECIPIENT_ID + ");",
     "CREATE INDEX IF NOT EXISTS archived_count_index ON " + TABLE_NAME + " (" + ARCHIVED + ", " + MESSAGE_COUNT + ");",
     "CREATE INDEX IF NOT EXISTS thread_pinned_index ON " + TABLE_NAME + " (" + PINNED + ");",
   };
@@ -176,8 +176,12 @@ public class ThreadDatabase extends Database {
 
     contentValues.put(MESSAGE_COUNT, 0);
 
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-    return db.insert(TABLE_NAME, null, contentValues);
+    SQLiteDatabase db     = databaseHelper.getWritableDatabase();
+    long           result = db.insert(TABLE_NAME, null, contentValues);
+
+    Recipient.live(recipientId).refresh();
+
+    return result;
   }
 
   private void updateThread(long threadId, long count, String body, @Nullable Uri attachment,
@@ -251,6 +255,7 @@ public class ThreadDatabase extends Database {
     GroupReceiptDatabase groupReceiptDatabase = DatabaseFactory.getGroupReceiptDatabase(context);
     MmsSmsDatabase       mmsSmsDatabase       = DatabaseFactory.getMmsSmsDatabase(context);
     MentionDatabase      mentionDatabase      = DatabaseFactory.getMentionDatabase(context);
+    int                  deletes              = 0;
 
     try (Cursor cursor = databaseHelper.getReadableDatabase().query(TABLE_NAME, new String[] { ID }, null, null, null, null, null)) {
       while (cursor != null && cursor.moveToNext()) {
@@ -265,12 +270,15 @@ public class ThreadDatabase extends Database {
       attachmentDatabase.trimAllAbandonedAttachments();
       groupReceiptDatabase.deleteAbandonedRows();
       mentionDatabase.deleteAbandonedMentions();
-      attachmentDatabase.deleteAbandonedAttachmentFiles();
+      deletes = attachmentDatabase.deleteAbandonedAttachmentFiles();
       db.setTransactionSuccessful();
     } finally {
       db.endTransaction();
     }
 
+    if (deletes > 0) {
+      Log.i(TAG, "Trim all threads caused " + deletes + " attachments to be deleted.");
+    }
 
     notifyAttachmentListeners();
     notifyStickerListeners();
@@ -287,6 +295,7 @@ public class ThreadDatabase extends Database {
     GroupReceiptDatabase groupReceiptDatabase = DatabaseFactory.getGroupReceiptDatabase(context);
     MmsSmsDatabase       mmsSmsDatabase       = DatabaseFactory.getMmsSmsDatabase(context);
     MentionDatabase      mentionDatabase      = DatabaseFactory.getMentionDatabase(context);
+    int                  deletes              = 0;
 
     db.beginTransaction();
 
@@ -296,12 +305,15 @@ public class ThreadDatabase extends Database {
       attachmentDatabase.trimAllAbandonedAttachments();
       groupReceiptDatabase.deleteAbandonedRows();
       mentionDatabase.deleteAbandonedMentions();
-      attachmentDatabase.deleteAbandonedAttachmentFiles();
+      deletes = attachmentDatabase.deleteAbandonedAttachmentFiles();
       db.setTransactionSuccessful();
     } finally {
       db.endTransaction();
     }
 
+    if (deletes > 0) {
+      Log.i(TAG, "Trim thread " + threadId + " caused " + deletes + " attachments to be deleted.");
+    }
 
     notifyAttachmentListeners();
     notifyStickerListeners();
@@ -426,7 +438,7 @@ public class ThreadDatabase extends Database {
       db.endTransaction();
     }
 
-    notifyConversationListeners(threadIdToSinceTimestamp.keySet());
+    notifyVerboseConversationListeners(threadIdToSinceTimestamp.keySet());
     notifyConversationListListeners();
 
     if (needsSync) {
@@ -539,7 +551,8 @@ public class ThreadDatabase extends Database {
     }
 
     if (hideSms) {
-      query += " AND (" + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.GROUP_ID + " NOT NULL OR " + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.REGISTERED + " = " + RecipientDatabase.RegisteredState.REGISTERED.getId() + ")";
+      query += " AND ((" + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.GROUP_ID + " NOT NULL AND " + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.GROUP_TYPE + " != " + RecipientDatabase.GroupType.MMS.getId() + ")" +
+               " OR " + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.REGISTERED + " = " + RecipientDatabase.RegisteredState.REGISTERED.getId() + ")";
       query += " AND " + RecipientDatabase.TABLE_NAME + "." + RecipientDatabase.FORCE_SMS_SELECTION + " = 0";
     }
 
@@ -605,35 +618,6 @@ public class ThreadDatabase extends Database {
     return false;
   }
 
-  public void setArchived(@NonNull RecipientId recipientId, boolean status) {
-    setArchived(Collections.singletonMap(recipientId, status));
-  }
-
-  public void setArchived(@NonNull Map<RecipientId, Boolean> status) {
-    SQLiteDatabase db    = databaseHelper.getReadableDatabase();
-
-    db.beginTransaction();
-    try {
-      String query = RECIPIENT_ID + " = ?";
-
-      for (Map.Entry<RecipientId, Boolean> entry : status.entrySet()) {
-        ContentValues values   = new ContentValues(2);
-
-        if (entry.getValue()) {
-          values.put(PINNED, "0");
-        }
-
-        values.put(ARCHIVED, entry.getValue() ? "1" : "0");
-        db.update(TABLE_NAME, values, query, new String[] { entry.getKey().serialize() });
-      }
-
-      db.setTransactionSuccessful();
-    } finally {
-      db.endTransaction();
-      notifyConversationListListeners();
-    }
-  }
-
   public void setArchived(Set<Long> threadIds, boolean archive) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
@@ -650,10 +634,14 @@ public class ThreadDatabase extends Database {
         db.update(TABLE_NAME, values, ID_WHERE, SqlUtil.buildArgs(threadId));
       }
 
+      List<RecipientId> recipientIds = getRecipientIdsForThreadIds(threadIds);
+      DatabaseFactory.getRecipientDatabase(context).markNeedsSync(recipientIds);
+
       db.setTransactionSuccessful();
     } finally {
       db.endTransaction();
       notifyConversationListListeners();
+      StorageSyncHelper.scheduleSyncForDataChange();
     }
   }
 
@@ -874,34 +862,11 @@ public class ThreadDatabase extends Database {
   }
 
   public void archiveConversation(long threadId) {
-    SQLiteDatabase db            = databaseHelper.getWritableDatabase();
-    ContentValues  contentValues = new ContentValues(1);
-    contentValues.put(PINNED, 0);
-    contentValues.put(ARCHIVED, 1);
-
-    db.update(TABLE_NAME, contentValues, ID_WHERE, new String[] {threadId + ""});
-    notifyConversationListListeners();
-
-    Recipient recipient = getRecipientForThreadId(threadId);
-    if (recipient != null) {
-      DatabaseFactory.getRecipientDatabase(context).markNeedsSync(recipient.getId());
-      StorageSyncHelper.scheduleSyncForDataChange();
-    }
+    setArchived(Collections.singleton(threadId), true);
   }
 
   public void unarchiveConversation(long threadId) {
-    SQLiteDatabase db            = databaseHelper.getWritableDatabase();
-    ContentValues  contentValues = new ContentValues(1);
-    contentValues.put(ARCHIVED, 0);
-
-    db.update(TABLE_NAME, contentValues, ID_WHERE, new String[] {threadId + ""});
-    notifyConversationListListeners();
-
-    Recipient recipient = getRecipientForThreadId(threadId);
-    if (recipient != null) {
-      DatabaseFactory.getRecipientDatabase(context).markNeedsSync(recipient.getId());
-      StorageSyncHelper.scheduleSyncForDataChange();
-    }
+    setArchived(Collections.singleton(threadId), false);
   }
 
   public void setLastSeen(long threadId) {
@@ -948,7 +913,8 @@ public class ThreadDatabase extends Database {
   }
 
   public void deleteConversation(long threadId) {
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    SQLiteDatabase db                     = databaseHelper.getWritableDatabase();
+    RecipientId    recipientIdForThreadId = getRecipientIdForThreadId(threadId);
 
     db.beginTransaction();
     try {
@@ -965,11 +931,12 @@ public class ThreadDatabase extends Database {
 
     notifyConversationListListeners();
     notifyConversationListeners(threadId);
-    ConversationUtil.clearShortcuts(context, Collections.singleton(threadId));
+    ConversationUtil.clearShortcuts(context, Collections.singleton(recipientIdForThreadId));
   }
 
   public void deleteConversations(Set<Long> selectedConversations) {
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    SQLiteDatabase    db                       = databaseHelper.getWritableDatabase();
+    List<RecipientId> recipientIdsForThreadIds = getRecipientIdsForThreadIds(selectedConversations);
 
     db.beginTransaction();
     try {
@@ -995,7 +962,7 @@ public class ThreadDatabase extends Database {
 
     notifyConversationListListeners();
     notifyConversationListeners(selectedConversations);
-    ConversationUtil.clearShortcuts(context, selectedConversations);
+    ConversationUtil.clearShortcuts(context, recipientIdsForThreadIds);
   }
 
   public void deleteAllConversations() {
@@ -1003,6 +970,7 @@ public class ThreadDatabase extends Database {
 
     db.beginTransaction();
     try {
+      DatabaseFactory.getMessageLogDatabase(context).deleteAll();
       DatabaseFactory.getSmsDatabase(context).deleteAllThreads();
       DatabaseFactory.getMmsDatabase(context).deleteAllThreads();
       DatabaseFactory.getDraftDatabase(context).clearAllDrafts();
@@ -1362,7 +1330,7 @@ public class ThreadDatabase extends Database {
     }
   }
 
-  private @Nullable ThreadRecord getThreadRecord(@Nullable Long threadId) {
+  public @Nullable ThreadRecord getThreadRecord(@Nullable Long threadId) {
     if (threadId == null) {
       return null;
     }
@@ -1546,6 +1514,7 @@ public class ThreadDatabase extends Database {
                                                           group.hasAvatar() ? Optional.of(group.getAvatarId()) : Optional.absent(),
                                                           false,
                                                           false,
+                                                          recipientSettings.getRegistered(),
                                                           recipientSettings,
                                                           null);
           recipient = new Recipient(recipientId, details, false);

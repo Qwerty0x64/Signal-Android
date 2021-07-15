@@ -49,6 +49,7 @@ public class MarkReadReceiver extends BroadcastReceiver {
 
       NotificationCancellationHelper.cancelLegacy(context, intent.getIntExtra(NOTIFICATION_ID_EXTRA, -1));
 
+      PendingResult finisher = goAsync();
       SignalExecutors.BOUNDED.execute(() -> {
         List<MarkedMessageInfo> messageIdsCollection = new LinkedList<>();
 
@@ -61,6 +62,7 @@ public class MarkReadReceiver extends BroadcastReceiver {
         process(context, messageIdsCollection);
 
         ApplicationDependencies.getMessageNotifier().updateNotification(context);
+        finisher.finish();
       });
     }
   }
@@ -90,14 +92,16 @@ public class MarkReadReceiver extends BroadcastReceiver {
                                                             .collect(Collectors.groupingBy(MarkedMessageInfo::getThreadId));
 
     Stream.of(threadToInfo).forEach(threadToInfoEntry -> {
-      Map<RecipientId, List<SyncMessageId>> idMapForThread = Stream.of(threadToInfoEntry.getValue())
-                                                                   .map(MarkedMessageInfo::getSyncMessageId)
-                                                                   .collect(Collectors.groupingBy(SyncMessageId::getRecipientId));
+      Map<RecipientId, List<MarkedMessageInfo>> recipientIdToInfo = Stream.of(threadToInfoEntry.getValue())
+                                                                          .map(info -> info)
+                                                                          .collect(Collectors.groupingBy(info -> info.getSyncMessageId().getRecipientId()));
 
-      Stream.of(idMapForThread).forEach(entry -> {
-        List<Long> timestamps = Stream.of(entry.getValue()).map(SyncMessageId::getTimetamp).toList();
+      Stream.of(recipientIdToInfo).forEach(entry -> {
+        long                    threadId    = threadToInfoEntry.getKey();
+        RecipientId             recipientId = entry.getKey();
+        List<MarkedMessageInfo> infos       = entry.getValue();
 
-        SendReadReceiptJob.enqueue(threadToInfoEntry.getKey(), entry.getKey(), timestamps);
+        SendReadReceiptJob.enqueue(threadId, recipientId, infos);
       });
     });
   }

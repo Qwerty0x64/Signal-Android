@@ -3,6 +3,7 @@ package org.thoughtcrime.securesms.components;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
@@ -22,6 +23,8 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +32,16 @@ import org.signal.core.util.ThreadUtil;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.animation.AnimationCompleteListener;
-import org.thoughtcrime.securesms.components.emoji.EmojiKeyboardProvider;
+import org.thoughtcrime.securesms.components.emoji.EmojiEventListener;
 import org.thoughtcrime.securesms.components.emoji.EmojiToggle;
 import org.thoughtcrime.securesms.components.emoji.MediaKeyboard;
+import org.thoughtcrime.securesms.components.voice.VoiceNotePlaybackState;
 import org.thoughtcrime.securesms.conversation.ConversationStickerSuggestionAdapter;
+import org.thoughtcrime.securesms.conversation.VoiceNoteDraftView;
+import org.thoughtcrime.securesms.database.DraftDatabase;
 import org.thoughtcrime.securesms.database.model.StickerRecord;
+import org.thoughtcrime.securesms.keyboard.KeyboardPage;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewRepository;
 import org.thoughtcrime.securesms.mms.GlideApp;
@@ -41,20 +49,21 @@ import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.mms.QuoteModel;
 import org.thoughtcrime.securesms.mms.SlideDeck;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.concurrent.AssertedSuccessListener;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
 import org.thoughtcrime.securesms.util.concurrent.SettableFuture;
 import org.whispersystems.libsignal.util.guava.Optional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class InputPanel extends LinearLayout
     implements MicrophoneRecorderView.Listener,
                KeyboardAwareLinearLayout.OnKeyboardShownListener,
-               EmojiKeyboardProvider.EmojiEventListener,
+               EmojiEventListener,
                ConversationStickerSuggestionAdapter.EventListener
 {
 
@@ -73,12 +82,13 @@ public class InputPanel extends LinearLayout
   private View            buttonToggle;
   private View            recordingContainer;
   private View            recordLockCancel;
-  private View            composeContainer;
+  private ViewGroup       composeContainer;
 
   private MicrophoneRecorderView microphoneRecorderView;
   private SlideToCancel          slideToCancel;
   private RecordTime             recordTime;
   private ValueAnimator          quoteAnimator;
+  private VoiceNoteDraftView     voiceNoteDraftView;
 
   private @Nullable Listener listener;
   private           boolean  emojiVisible;
@@ -114,6 +124,7 @@ public class InputPanel extends LinearLayout
     this.buttonToggle           = findViewById(R.id.button_toggle);
     this.recordingContainer     = findViewById(R.id.recording_container);
     this.recordLockCancel       = findViewById(R.id.record_cancel);
+    this.voiceNoteDraftView     = findViewById(R.id.voice_note_draft_view);
     this.slideToCancel          = new SlideToCancel(findViewById(R.id.slide_to_cancel));
     this.microphoneRecorderView = findViewById(R.id.recorder_view);
     this.microphoneRecorderView.setListener(this);
@@ -124,7 +135,7 @@ public class InputPanel extends LinearLayout
 
     this.recordLockCancel.setOnClickListener(v -> microphoneRecorderView.cancelAction());
 
-    if (TextSecurePreferences.isSystemEmojiPreferred(getContext())) {
+    if (SignalStore.settings().isPreferSystemEmoji()) {
       mediaKeyboard.setVisibility(View.GONE);
       emojiVisible = false;
     } else {
@@ -150,6 +161,7 @@ public class InputPanel extends LinearLayout
     this.listener = listener;
 
     mediaKeyboard.setOnClickListener(v -> listener.onEmojiToggle());
+    voiceNoteDraftView.setListener(listener);
   }
 
   public void setMediaListener(@NonNull MediaListener listener) {
@@ -162,7 +174,7 @@ public class InputPanel extends LinearLayout
                        @NonNull CharSequence body,
                        @NonNull SlideDeck attachments)
   {
-    this.quoteView.setQuote(glideRequests, id, author, body, false, attachments);
+    this.quoteView.setQuote(glideRequests, id, author, body, false, attachments, null);
 
     int originalHeight = this.quoteView.getVisibility() == VISIBLE ? this.quoteView.getMeasuredHeight()
                                                                    : 0;
@@ -225,6 +237,10 @@ public class InputPanel extends LinearLayout
     return animator;
   }
 
+  public boolean hasSaveableContent() {
+    return getQuote().isPresent() || voiceNoteDraftView.getDraft() != null;
+  }
+
   public Optional<QuoteModel> getQuote() {
     if (quoteView.getQuoteId() > 0 && quoteView.getVisibility() == View.VISIBLE) {
       return Optional.of(new QuoteModel(quoteView.getQuoteId(), quoteView.getAuthor().getId(), quoteView.getBody().toString(), false, quoteView.getAttachments(), quoteView.getMentions()));
@@ -275,8 +291,8 @@ public class InputPanel extends LinearLayout
     mediaKeyboard.setVisibility(show ? View.VISIBLE : GONE);
   }
 
-  public void setMediaKeyboardToggleMode(boolean isSticker) {
-    mediaKeyboard.setStickerMode(isSticker);
+  public void setMediaKeyboardToggleMode(@NonNull KeyboardPage page) {
+    mediaKeyboard.setStickerMode(page);
   }
 
   public boolean isStickerMode() {
@@ -287,13 +303,17 @@ public class InputPanel extends LinearLayout
     return mediaKeyboard;
   }
 
+  public MediaKeyboard.MediaKeyboardListener getMediaKeyboardListener() {
+    return mediaKeyboard;
+  }
+
   public void setWallpaperEnabled(boolean enabled) {
     if (enabled) {
-      setBackgroundColor(getContext().getResources().getColor(R.color.wallpaper_compose_background));
-      composeContainer.setBackgroundResource(R.drawable.compose_background_wallpaper);
+      setBackground(new ColorDrawable(getContext().getResources().getColor(R.color.wallpaper_compose_background)));
+      composeContainer.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.compose_background_wallpaper)));
     } else {
-      setBackgroundColor(getResources().getColor(R.color.signal_background_primary));
-      composeContainer.setBackgroundResource(R.drawable.compose_background);
+      setBackground(new ColorDrawable(getContext().getResources().getColor(R.color.signal_background_primary)));
+      composeContainer.setBackground(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.compose_background)));
     }
   }
 
@@ -308,7 +328,10 @@ public class InputPanel extends LinearLayout
     recordTime.display();
     slideToCancel.display();
 
-    if (emojiVisible) ViewUtil.fadeOut(mediaKeyboard, FADE_TIME, View.INVISIBLE);
+    if (emojiVisible) {
+      ViewUtil.fadeOut(mediaKeyboard, FADE_TIME, View.INVISIBLE);
+    }
+
     ViewUtil.fadeOut(composeText, FADE_TIME, View.INVISIBLE);
     ViewUtil.fadeOut(quickCameraToggle, FADE_TIME, View.INVISIBLE);
     ViewUtil.fadeOut(quickAudioToggle, FADE_TIME, View.INVISIBLE);
@@ -361,6 +384,10 @@ public class InputPanel extends LinearLayout
     this.microphoneRecorderView.cancelAction();
   }
 
+  public @NonNull Observer<VoiceNotePlaybackState> getPlaybackStateObserver() {
+    return voiceNoteDraftView.getPlaybackStateObserver();
+  }
+
   public void setEnabled(boolean enabled) {
     composeText.setEnabled(enabled);
     mediaKeyboard.setEnabled(enabled);
@@ -377,11 +404,7 @@ public class InputPanel extends LinearLayout
     future.addListener(new AssertedSuccessListener<Void>() {
       @Override
       public void onSuccess(Void result) {
-        if (emojiVisible) ViewUtil.fadeIn(mediaKeyboard, FADE_TIME);
-        ViewUtil.fadeIn(composeText, FADE_TIME);
-        ViewUtil.fadeIn(quickCameraToggle, FADE_TIME);
-        ViewUtil.fadeIn(quickAudioToggle, FADE_TIME);
-        buttonToggle.animate().alpha(1).setDuration(FADE_TIME).start();
+        fadeInNormalComposeViews();
       }
     });
 
@@ -422,7 +445,65 @@ public class InputPanel extends LinearLayout
     microphoneRecorderView.unlockAction();
   }
 
-  public interface Listener {
+  public void showGifMovedTooltip() {
+    TooltipPopup.forTarget(mediaKeyboard)
+                .setBackgroundTint(ContextCompat.getColor(getContext(), R.color.signal_accent_primary))
+                .setTextColor(getResources().getColor(R.color.core_white))
+                .setText(R.string.ConversationActivity__gifs_are_now_here)
+                .show(TooltipPopup.POSITION_ABOVE);
+  }
+
+  public void setVoiceNoteDraft(@Nullable DraftDatabase.Draft voiceNoteDraft) {
+    if (voiceNoteDraft != null) {
+      voiceNoteDraftView.setDraft(voiceNoteDraft);
+      voiceNoteDraftView.setVisibility(VISIBLE);
+      hideNormalComposeViews();
+    } else {
+      voiceNoteDraftView.clearDraft();
+      ViewUtil.fadeOut(voiceNoteDraftView, FADE_TIME);
+      fadeInNormalComposeViews();
+    }
+  }
+
+  public @Nullable DraftDatabase.Draft getVoiceNoteDraft() {
+    return voiceNoteDraftView.getDraft();
+  }
+
+  private void hideNormalComposeViews() {
+    if (emojiVisible) {
+      Animation animation = mediaKeyboard.getAnimation();
+      if (animation != null) {
+        animation.cancel();
+      }
+
+      mediaKeyboard.setVisibility(View.INVISIBLE);
+    }
+
+    for (Animation animation : Arrays.asList(composeText.getAnimation(), quickCameraToggle.getAnimation(), quickAudioToggle.getAnimation())) {
+      if (animation != null) {
+        animation.cancel();
+      }
+    }
+
+    buttonToggle.animate().cancel();
+
+    composeText.setVisibility(View.INVISIBLE);
+    quickCameraToggle.setVisibility(View.INVISIBLE);
+    quickAudioToggle.setVisibility(View.INVISIBLE);
+  }
+
+  private void fadeInNormalComposeViews() {
+    if (emojiVisible) {
+      ViewUtil.fadeIn(mediaKeyboard, FADE_TIME);
+    }
+
+    ViewUtil.fadeIn(composeText, FADE_TIME);
+    ViewUtil.fadeIn(quickCameraToggle, FADE_TIME);
+    ViewUtil.fadeIn(quickAudioToggle, FADE_TIME);
+    buttonToggle.animate().alpha(1).setDuration(FADE_TIME).start();
+  }
+
+  public interface Listener extends VoiceNoteDraftView.Listener {
     void onRecorderStarted();
     void onRecorderLocked();
     void onRecorderFinished();

@@ -51,6 +51,7 @@
   <string name="DraftDatabase_Draft_video_snippet">(video)</string>
   <string name="DraftDatabase_Draft_location_snippet">(lokacija)</string>
   <string name="DraftDatabase_Draft_quote_snippet">(odgovor)</string>
+  <string name="DraftDatabase_Draft_voice_note">(Glasovno sporočilo)</string>
   <!--AttachmentKeyboard-->
   <string name="AttachmentKeyboard_gallery">Galerija</string>
   <string name="AttachmentKeyboard_gif">GIF</string>
@@ -92,7 +93,7 @@
   <string name="BlockUnblockDialog_unblock_s">Odblokiram uporabnika/co %1$s?</string>
   <string name="BlockUnblockDialog_block">Blokiraj</string>
   <string name="BlockUnblockDialog_block_and_leave">Blokiraj in zapusti</string>
-  <string name="BlockUnblockDialog_block_and_delete">Blokiraj in izbriši</string>
+  <string name="BlockUnblockDialog_report_spam_and_block">Označi za neželeno in blokiraj</string>
   <!--BucketedThreadMedia-->
   <string name="BucketedThreadMedia_Today">Danes</string>
   <string name="BucketedThreadMedia_Yesterday">Včeraj</string>
@@ -168,6 +169,7 @@
   <string name="ConversationItem_error_network_not_delivered">Pošiljanje ni uspelo</string>
   <string name="ConversationItem_received_key_exchange_message_tap_to_process">Prejeta informacija o izmenjavi ključev. Kliknite za obdelavo.</string>
   <string name="ConversationItem_group_action_left">Uporabnik/ca %1$s je zapustil/a skupino.</string>
+  <string name="ConversationItem_send_paused">Pošiljanje ustavljeno</string>
   <string name="ConversationItem_click_to_approve_unencrypted">Pošiljanje ni uspelo, tapnite za nezavarovan SMS</string>
   <string name="ConversationItem_click_to_approve_unencrypted_sms_dialog_title">Preklopim na nešifriran SMS?</string>
   <string name="ConversationItem_click_to_approve_unencrypted_mms_dialog_title">Preklopim na nešifriran MMS?</string>
@@ -238,6 +240,10 @@
   <string name="ConversationActivity_join">Pridruži se</string>
   <string name="ConversationActivity_full">Polno</string>
   <string name="ConversationActivity_error_sending_media">Napaka pri pošiljanju medijske datoteke</string>
+  <string name="ConversationActivity__reported_as_spam_and_blocked">Označeno kot neželeno in blokirano.</string>
+  <string name="ConversationActivity_gifs_have_moved">GIF-i so premaknjeni</string>
+  <string name="ConversationActivity_look_for_gifs_next_to_emoji_and_stickers">Najdete jih zraven emojijev in nalepk.</string>
+  <string name="ConversationActivity__gifs_are_now_here">GIF-i so odslej tu.</string>
   <!--ConversationAdapter-->
   <plurals name="ConversationAdapter_n_unread_messages">
     <item quantity="one">%d neprebrano sporočilo</item>
@@ -338,6 +344,8 @@
   <!--ConversationTitleView-->
   <string name="ConversationTitleView_verified">Potrjeno</string>
   <string name="ConversationTitleView_you">Vi</string>
+  <!--ConversationTypingView-->
+  <string name="ConversationTypingView__plus_d">+%1$d</string>
   <!--CreateGroupActivity-->
   <string name="CreateGroupActivity_some_contacts_cannot_be_in_legacy_groups">Nekateri uporabniki/ce ne morejo biti v starih skupinah.</string>
   <!--CreateProfileActivity-->
@@ -504,10 +512,6 @@
     <item quantity="few">Ti/te člani/ce se ne morejo pridružiti Novim skupinam, zato so bili/e odstranjeni/e iz skupine:</item>
     <item quantity="other">Ti/te člani/ce se ne morejo pridružiti Novim skupinam, zato so bili/e odstranjeni/e iz skupine:</item>
   </plurals>
-  <!--GroupsV1MigrationInitiationReminder-->
-  <string name="GroupsV1MigrationInitiationReminder_to_access_new_features_like_mentions">Za uporabo naprednih funkcij, kot so @omembe in skrbniki/ce skupin, nadgradite to skupino.</string>
-  <string name="GroupsV1MigrationInitiationReminder_not_now">Ne zdaj</string>
-  <string name="GroupsV1MigrationInitiationReminder_upgrade_group">Nadgradi skupino</string>
   <!--GroupsV1MigrationSuggestionsReminder-->
   <plurals name="GroupsV1MigrationSuggestionsReminder_members_couldnt_be_added_to_the_new_group">
     <item quantity="one">%1$d član/ica ni mogel/la biti ponovno dodan/a v Novo skupino. Ga/jo želite dodati zdaj?</item>
@@ -670,7 +674,7 @@
   <string name="ManageGroupActivity_mute_notifications">Izklop obvestil</string>
   <string name="ManageGroupActivity_custom_notifications">Obvestila po meri</string>
   <string name="ManageGroupActivity_mentions">Omembe</string>
-  <string name="ManageGroupActivity_chat_wallpaper">Ozadje pogovora</string>
+  <string name="ManageGroupActivity_chat_color_and_wallpaper">Barva pogovora in ozadja</string>
   <string name="ManageGroupActivity_until_s">Do %1$s</string>
   <string name="ManageGroupActivity_always">Za vedno</string>
   <string name="ManageGroupActivity_off">Izklopljena</string>
@@ -700,6 +704,8 @@
   <string name="ManageGroupActivity_upgrade_this_group">nadgradite to skupino.</string>
   <string name="ManageGroupActivity_this_is_an_insecure_mms_group">To je nezavarovana skupina MMS. Za bolj zasebno komunikacijo povabite svoje stike na Signal.</string>
   <string name="ManageGroupActivity_invite_now">Povabi zdaj</string>
+  <string name="ManageGroupActivity_more">več</string>
+  <string name="ManageGroupActivity_add_group_description">Dodaj opis skupine …</string>
   <!--GroupMentionSettingDialog-->
   <string name="GroupMentionSettingDialog_notify_me_for_mentions">Obveščajte me o omembah</string>
   <string name="GroupMentionSettingDialog_receive_notifications_when_youre_mentioned_in_muted_chats">Želite prejemati obvestila kadar bo vaše ime omenjeno v pogovorih, ki ste jih utišali?</string>
@@ -714,23 +720,6 @@
   <string name="ManageProfileFragment_your_username">Vaše uporabniško ime</string>
   <string name="ManageProfileFragment_failed_to_set_avatar">Nastavitev avatarja ni uspela</string>
   <!--ManageRecipientActivity-->
-  <string name="ManageRecipientActivity_add_to_system_contacts">Dodaj k sistemskim stikom</string>
-  <string name="ManageRecipientActivity_this_person_is_in_your_contacts">Uporabnik/ca je med vašimi stiki</string>
-  <string name="ManageRecipientActivity_disappearing_messages">Izginjajoča sporočila</string>
-  <string name="ManageRecipientActivity_chat_color">Barva pogovora</string>
-  <string name="ManageRecipientActivity_chat_wallpaper">Ozadje pogovora</string>
-  <string name="ManageRecipientActivity_block">Blokiraj</string>
-  <string name="ManageRecipientActivity_unblock">Odblokiraj</string>
-  <string name="ManageRecipientActivity_view_safety_number">Pregled varnostnega števila</string>
-  <string name="ManageRecipientActivity_mute_notifications">Izklopi obvestila</string>
-  <string name="ManageRecipientActivity_custom_notifications">Obvestila po meri</string>
-  <string name="ManageRecipientActivity_until_s">Do %1$s</string>
-  <string name="ManageRecipientActivity_always">Za vedno</string>
-  <string name="ManageRecipientActivity_off">Izklopljena</string>
-  <string name="ManageRecipientActivity_on">Vklopljena</string>
-  <string name="ManageRecipientActivity_add_to_a_group">Dodaj v skupino</string>
-  <string name="ManageRecipientActivity_view_all_groups">Prikaz vseh skupin</string>
-  <string name="ManageRecipientActivity_see_all">Prikaz vseh</string>
   <string name="ManageRecipientActivity_no_groups_in_common">Nobene skupne skupine</string>
   <plurals name="ManageRecipientActivity_d_groups_in_common">
     <item quantity="one">%d skupna skupina</item>
@@ -738,10 +727,6 @@
     <item quantity="few">%d skupne skupine</item>
     <item quantity="other">%d skupnih skupin</item>
   </plurals>
-  <string name="ManageRecipientActivity_message_description">Sporočilo</string>
-  <string name="ManageRecipientActivity_voice_call_description">Zvočni klic</string>
-  <string name="ManageRecipientActivity_insecure_voice_call_description">Nezavarovan zvočni klic</string>
-  <string name="ManageRecipientActivity_video_call_description">Video klic</string>
   <plurals name="GroupMemberList_invited">
     <item quantity="one">Uporabnik %1$s je povabil eno osebo</item>
     <item quantity="two">Uporabnik %1$s je povabil %2$d osebi</item>
@@ -903,6 +888,7 @@
   <string name="MediaOverviewActivity_audio">Zvok</string>
   <string name="MediaOverviewActivity_video">Video</string>
   <string name="MediaOverviewActivity_image">Slika</string>
+  <string name="MediaOverviewActivity_voice_message">Glasovno sporočilo</string>
   <string name="MediaOverviewActivity_sent_by_s">Poslano od uporabnika/ce %1$s</string>
   <string name="MediaOverviewActivity_sent_by_you">Poslano od vas</string>
   <string name="MediaOverviewActivity_sent_by_s_to_s">Poslano od uporabnika/ce %1$s za uporabnika/co %2$s</string>
@@ -918,6 +904,7 @@
   <string name="Megaphones_new_group">Nova skupina</string>
   <string name="Megaphones_invite_friends">Vabilo prijateljem/icam</string>
   <string name="Megaphones_use_sms">Uporabi SMS</string>
+  <string name="Megaphones_appearance">Izgled</string>
   <!--NotificationBarManager-->
   <string name="NotificationBarManager_signal_call_in_progress">Klic Signal poteka</string>
   <string name="NotificationBarManager__establishing_signal_call">Vzpostavljam klic Signal</string>
@@ -942,6 +929,8 @@
   <!--MediaSendActivity-->
   <string name="MediaSendActivity_add_a_caption">Dodajanje besedila …</string>
   <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit">Predmet je bil odstranjen, ker je presegel omejitev velikosti.</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_had_an_unknown_type">Predmet je bil odstranjen, ker je bil neznanega tipa</string>
+  <string name="MediaSendActivity_an_item_was_removed_because_it_exceeded_the_size_limit_or_had_an_unknown_type">Predmet je bil odstranjen, ker je presegel omejitev velikosti ali pa je bil neznanega tipa</string>
   <string name="MediaSendActivity_camera_unavailable">Kamera ni dostopna.</string>
   <string name="MediaSendActivity_message_to_s">Sporočilo za uporabnika/co %s</string>
   <string name="MediaSendActivity_message">Sporočilo</string>
@@ -959,6 +948,9 @@
   <!--MediaRepository-->
   <string name="MediaRepository_all_media">Vsa večpredstavnostna sporočila</string>
   <string name="MediaRepository__camera">Kamera</string>
+  <!--MessageDecryptionUtil-->
+  <string name="MessageDecryptionUtil_failed_to_decrypt_message">Dešifriranje sporočila ni bilo uspešno</string>
+  <string name="MessageDecryptionUtil_tap_to_send_a_debug_log">Tapnite za oddajo zabeležke za razhroščevanje</string>
   <!--MessageRecord-->
   <string name="MessageRecord_unknown">Neznano</string>
   <string name="MessageRecord_message_encrypted_with_a_legacy_protocol_version_that_is_no_longer_supported">Prejeli ste sporočilo, šifrirano z različico aplikacije Signal, ki ni več podprta. Prosite pošiljatelja, naj posodobi Signal na najnovejšo različico.</string>
@@ -1072,6 +1064,10 @@
   <string name="MessageRecord_you_changed_the_group_name_to_s">Ime skupine ste spremenili v \"%1$s\".</string>
   <string name="MessageRecord_s_changed_the_group_name_to_s">Uporabnik/ca %1$s je spremenil/a ime skupine v \"%2$s\".</string>
   <string name="MessageRecord_the_group_name_has_changed_to_s">Ime skupine je bilo spremenjeno v \"%1$s\".</string>
+  <!--GV2 description change-->
+  <string name="MessageRecord_you_changed_the_group_description">Spremenili ste opis skupine.</string>
+  <string name="MessageRecord_s_changed_the_group_description">Uporabnik/ca %1$s je spremenil/a opis skupine.</string>
+  <string name="MessageRecord_the_group_description_has_changed">Opis skupine je bil spremenjen.</string>
   <!--GV2 avatar change-->
   <string name="MessageRecord_you_changed_the_group_avatar">Spremenili ste skupinin avatar.</string>
   <string name="MessageRecord_s_changed_the_group_avatar">Uporabnik/ca %1$s je spremenil/a skupinin avatar.</string>
@@ -1128,6 +1124,7 @@
   <string name="MessageRecord_you_marked_your_safety_number_with_s_verified_from_another_device">Varnostno število z uporabnikom/co %s ste potrdili na drugi napravi</string>
   <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified">Varnostno število z uporabnikom/co %s ste označili kot nepotrjeno</string>
   <string name="MessageRecord_you_marked_your_safety_number_with_s_unverified_from_another_device">Varnostno število z uporabnikom/co %s ste na drugi napravi označili kot nepotrjeno</string>
+  <string name="MessageRecord_a_message_from_s_couldnt_be_delivered">Sporočilo uporabnika/ce %s ni moglo biti dostavljeno</string>
   <!--Group Calling update messages-->
   <string name="MessageRecord_s_started_a_group_call_s">Uporabnik/ca %1$s je začel/a skupinski klic. · %2$s</string>
   <string name="MessageRecord_s_is_in_the_group_call_s">Uporabnik/ca %1$s je v skupinskem klicu. · %2$s</string>
@@ -1167,6 +1164,7 @@
   <string name="MessageRequestBottomView_do_you_want_to_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">Se želite pridružiti skupini in z njenimi člani/cami deliti svoje ime in fotografijo? Dokler se ne pridružite, ne bodo vedeli/e, da ste videli njihova sporočila.</string>
   <string name="MessageRequestBottomView_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">Se želite pridružiti skupini? Dokler se ne pridružite, skupina ne bo vedela, da ste videli njena sporočila.</string>
   <string name="MessageRequestBottomView_unblock_this_group_and_share_your_name_and_photo_with_its_members">Želite omogočiti članom/icam skupine, da vam pošiljajo sporočila in z njimi deliti svoje ime in fotografijo? Dokler jih ne odblokirate, od njih ne boste prejemali sporočil.</string>
+  <string name="MessageRequestProfileView_view">Preglej</string>
   <string name="MessageRequestProfileView_member_of_one_group">Član/ica skupine %1$s</string>
   <string name="MessageRequestProfileView_member_of_two_groups">Član/ica skupin %1$s in %2$s</string>
   <string name="MessageRequestProfileView_member_of_many_groups">Član/ica skupin %1$s, %2$s in %3$s</string>
@@ -1211,10 +1209,6 @@
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">Izgleda, da želite za povezavo z napravo Signal uporabiti zunanji optični čitalnik. Prosimo, da storite to znotraj aplikacije Signal, saj je tako najvarneje.</string>
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Dostop do kamere je bil trajno onemogočen. Aplikacija Signal potrebuje dovoljenje za dostop do kamere, da bi lahko skenirali kode QR. Prosimo, pojdite v meni Nastavitve aplikacij, izberite \"Dovoljenja\" in omogočite dovoljenje pod postavko \"Kamera\".</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Brez dovoljenja za dostop do kamere ne morem skenirati kode QR.</string>
-  <!--ExpirationDialog-->
-  <string name="ExpirationDialog_disappearing_messages">Izginjajoča sporočila</string>
-  <string name="ExpirationDialog_your_messages_will_not_expire">Vaša sporočila ne bodo potekla.</string>
-  <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Sporočila, poslana ali prejeta v tem pogovoru, bodo izginila %s po ogledu.</string>
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Posodobi zdaj</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Ta različica aplikacije Signal poteče danes. Nadgradite je na najnovejšo različico.</string>
@@ -1276,6 +1270,12 @@
   <string name="ReactionsConversationView_plus">+%1$d</string>
   <!--ReactionsRecipientAdapter-->
   <string name="ReactionsRecipientAdapter_you">Vi</string>
+  <!--RecaptchaRequiredBottomSheetFragment-->
+  <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">Za nadaljevanje sporočanja se verificirajte</string>
+  <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">Da bi preprečili nezaželeno pošto, prosimo dokončajte postopek verifikacije.</string>
+  <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">Po dokončanem postopku verifikacije lahko nadaljujete s sporočanjem. Vsa ustavljena sporočila bodo avtomatično poslana.</string>
+  <!--Recipient-->
+  <string name="Recipient_you">Vi</string>
   <!--RecipientPreferencesActivity-->
   <string name="RecipientPreferenceActivity_block">Blokiraj</string>
   <string name="RecipientPreferenceActivity_unblock">Odblokiraj</string>
@@ -1312,6 +1312,7 @@
   <string name="WebRtcCallView__no_one_else_is_here">Tu ni nikogar drugega</string>
   <string name="WebRtcCallView__s_is_in_this_call">Uporabnik/ca %1$s je v tem klicu</string>
   <string name="WebRtcCallView__s_and_s_are_in_this_call">Uporabnika/ci %1$s in %2$s sta v tem klicu</string>
+  <string name="WebRtcCallView__s_is_presenting">%1$s predstavlja</string>
   <plurals name="WebRtcCallView__s_s_and_d_others_are_in_this_call">
     <item quantity="one">Uporabnika/ci  %1$s, %2$s, in še %3$d drug/a so v tem klicu</item>
     <item quantity="two">Uporabnika/ci  %1$s, %2$s, in še %3$d druga/i so v tem klicu</item>
@@ -1332,12 +1333,17 @@
   <string name="CallParticipantView__cant_receive_audio_video_from_s">Ne morete prejemati zvoka &amp; videa od uporabnika/ce %1$s</string>
   <string name="CallParticipantView__cant_receive_audio_and_video_from_s">Ne morete prejemati zvoka in videa od uporabnika/ce %1$s</string>
   <string name="CallParticipantView__this_may_be_Because_they_have_not_verified_your_safety_number_change">To je zato, ker niso overili vašega spremenjenega varnostnega števila, ker je nek problem na njihovi napravi ali pa so vas blokirali.</string>
+  <!--CallToastPopupWindow-->
+  <string name="CallToastPopupWindow__swipe_to_view_screen_share">Za ogled delitve zaslona podrsajte</string>
   <!--ProxyBottomSheetFragment-->
   <string name="ProxyBottomSheetFragment_proxy_server">Proksi strežnik</string>
   <string name="ProxyBottomSheetFragment_proxy_address">Naslov proksi</string>
   <string name="ProxyBottomSheetFragment_do_you_want_to_use_this_proxy_address">Želite uporabljati ta naslov proksi?</string>
   <string name="ProxyBottomSheetFragment_use_proxy">Uporabi proksi</string>
   <string name="ProxyBottomSheetFragment_successfully_connected_to_proxy">Uspešno povezani s strežnikom proksi.</string>
+  <!--RecaptchaProofActivity-->
+  <string name="RecaptchaProofActivity_failed_to_submit">Neuspešna oddaja</string>
+  <string name="RecaptchaProofActivity_complete_verification">Dokončajte verifikacijo</string>
   <!--RegistrationActivity-->
   <string name="RegistrationActivity_select_your_country">Izberite svojo državo</string>
   <string name="RegistrationActivity_you_must_specify_your_country_code">Navesti morate mednarodno kodo svoje države</string>
@@ -1451,6 +1457,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="SubmitDebugLogActivity_success">Uspešno opravljeno!</string>
   <string name="SubmitDebugLogActivity_copy_this_url_and_add_it_to_your_issue">Prekopirajte naslov URL in ga dodajte k prijavi napake ali v elektronsko sporočilo za tehnično podporo:\n\n<b>%1$s</b></string>
   <string name="SubmitDebugLogActivity_share">Deli</string>
+  <string name="SubmitDebugLogActivity_this_log_will_be_posted_publicly_online">Sistemska zabeležba bo javno objavljena na spletu za razvijalce aplikacije. Pred objavo jo lahko pregledate in popravite.</string>
   <!--SupportEmailUtil-->
   <string name="SupportEmailUtil_filter">Filter:</string>
   <string name="SupportEmailUtil_device_info">Podatki o napravi:</string>
@@ -1483,6 +1490,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="ThreadRecord_you_marked_verified">Potrdili ste</string>
   <string name="ThreadRecord_you_marked_unverified">Označili ste kot nepotrjeno</string>
   <string name="ThreadRecord_message_could_not_be_processed">Sporočilo ni moglo biti obdelano</string>
+  <string name="ThreadRecord_delivery_issue">Problem pri dostavi</string>
   <string name="ThreadRecord_message_request">Prošnja za pogovor</string>
   <string name="ThreadRecord_photo">Slika</string>
   <string name="ThreadRecord_gif">GIF</string>
@@ -1565,6 +1573,8 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="MessageNotifier_message_delivery_failed">Dostava sporočila ni uspela.</string>
   <string name="MessageNotifier_failed_to_deliver_message">Neuspešna dostava sporočila.</string>
   <string name="MessageNotifier_error_delivering_message">Napaka pri dostavi sporočila.</string>
+  <string name="MessageNotifier_message_delivery_paused">Dostava sporočil je ustavljena.</string>
+  <string name="MessageNotifier_verify_to_continue_messaging_on_signal">Za nadaljevanje sporočanja na Signalu se verificirajte.</string>
   <string name="MessageNotifier_mark_all_as_read">Označi vse kot prebrano</string>
   <string name="MessageNotifier_mark_read">Označi kot prebrano</string>
   <string name="MessageNotifier_turn_off_these_notifications">Izklopi ta obvestila</string>
@@ -1615,6 +1625,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="SingleRecipientNotificationBuilder_signal">Signal</string>
   <string name="SingleRecipientNotificationBuilder_new_message">Novo sporočilo</string>
   <string name="SingleRecipientNotificationBuilder_message_request">Prošnja za pogovor</string>
+  <string name="SingleRecipientNotificationBuilder_you">Vi</string>
   <!--ThumbnailView-->
   <string name="ThumbnailView_Play_video_description">Predvajaj video</string>
   <string name="ThumbnailView_Has_a_caption_description">Ima besedilo</string>
@@ -1727,6 +1738,10 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="ConversationUpdateItem_call_is_full">Klic je polno zaseden</string>
   <string name="ConversationUpdateItem_invite_friends">Vabilo prijateljem/icam</string>
   <string name="ConversationUpdateItem_enable_call_notifications">Vklopi obvestila o klicih</string>
+  <string name="ConversationUpdateItem_no_groups_in_common_review_requests_carefully">Nimate skupnih skupin. Dobro preverite prošnje.</string>
+  <string name="ConversationUpdateItem_no_contacts_in_this_group_review_requests_carefully">V tej skupini ni nikogar iz vašega imenika. Dobro preverite prošnje.</string>
+  <string name="ConversationUpdateItem_view">Preglej</string>
+  <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">Čas poteka sporočil bo nastavljen na %1$s.</string>
   <!--audio_view-->
   <string name="audio_view__play_pause_accessibility_description">Predvajanje … pavza</string>
   <string name="audio_view__download_accessibility_description">Prenesi</string>
@@ -1861,6 +1876,10 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <!--prompt_mms_activity-->
   <string name="prompt_mms_activity__signal_requires_mms_settings_to_deliver_media_and_group_messages">Za pošiljanje vešpredsatvnostnih in skupinskih sporočil potrebuje aplikacija Signal nastavitve MMS vašega mobilnega operaterja. Teh podatkov ni mogoče pridobiti iz vaše naprave, kar je značilno za zaklenjene naprave in druge omejene konfiguracije. </string>
   <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">Za pošiljanje večpredstavnostnih in skupinskih sporočil tapnite \'OK\' in vnesite potrebne podatke. Nastavitve MMS za vašega operaterja lahko najverjetneje najdete z iskanjem po spletu. Podatke morate vnesti samo enkrat.</string>
+  <!--BadDecryptLearnMoreDialog-->
+  <string name="BadDecryptLearnMoreDialog_delivery_issue">Problem pri dostavi</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Sporočilo, nalepka, reakcija ali obvestilo o prebranem sporočilu uporabnika/ce %s. vam niso mogli biti dostavljeni. Lahko so bili poslani osebno ali prek skupine.</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Sporočilo, nalepka, reakcija ali obvestilo o prebranem sporočilu uporabnika/ce %s vam niso mogli biti dostavljeni.</string>
   <!--profile_create_activity-->
   <string name="CreateProfileActivity_first_name_required">Ime (zahtevano)</string>
   <string name="CreateProfileActivity_last_name_optional">Priimek (neobvezno)</string>
@@ -1868,6 +1887,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="CreateProfileActivity__username">Uporabniško ime</string>
   <string name="CreateProfileActivity__create_a_username">Stvaritev uporabniškega imena</string>
   <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Imena in fotografije MMS skupin po meri bodo vidna le vam.</string>
+  <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Opisi skupine bodo vidni članom/icam skupine in ljudem, ki so bili povabljeni.</string>
   <!--EditAboutFragment-->
   <string name="EditAboutFragment_about">Več</string>
   <string name="EditAboutFragment_write_a_few_words_about_yourself">Napišite nekaj besed o sebi …</string>
@@ -1880,8 +1900,9 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="EditAboutFragment_taking_a_break">Možgani na off</string>
   <string name="EditAboutFragment_working_on_something_new">Delam na nečem …</string>
   <!--EditProfileFragment-->
-  <string name="EditProfileFragment__edit_group_name_and_photo">Uredi ime in fotografijo skupine</string>
+  <string name="EditProfileFragment__edit_group">Uredi skupino</string>
   <string name="EditProfileFragment__group_name">Ime skupine</string>
+  <string name="EditProfileFragment__group_description">Opis skupine</string>
   <!--EditProfileNameFragment-->
   <string name="EditProfileNameFragment_your_name">Vaše ime</string>
   <string name="EditProfileNameFragment_first_name">Ime</string>
@@ -1915,6 +1936,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="message_details_recipient_header__delivered_to">Dostavljeno uporabniku/ci</string>
   <string name="message_details_recipient_header__read_by">Prebral uporabnik/ca</string>
   <string name="message_details_recipient_header__not_sent">Neposlano</string>
+  <string name="message_details_recipient_header__viewed">Videli:</string>
   <!--message_Details_recipient-->
   <string name="message_details_recipient__failed_to_send">Pošiljanje ni uspelo</string>
   <string name="message_details_recipient__new_safety_number">Novo varnostno število</string>
@@ -1949,11 +1971,12 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="HelpFragment__could_not_upload_logs">Sistemska zabeležba ni bila prenešena</string>
   <string name="HelpFragment__please_be_as_descriptive_as_possible">Pri opisu napake bodite čim bolj natančni, da bomo lažje razumeli za kaj gre.</string>
   <string-array name="HelpFragment__categories">
+    <item>-- Prosimo izberite opcijo --</item>
     <item>Nekaj ne deluje</item>
     <item>Predlog za novo funkcijo</item>
     <item>Vprašanje</item>
     <item>Odziv</item>
-    <item>Drugo</item>
+    <item>Druigo</item>
     <item>Plačila</item>
   </string-array>
   <!--ReactWithAnyEmojiBottomSheetDialogFragment-->
@@ -1968,6 +1991,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Simboli</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Zastave</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Emotikoni</string>
+  <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Ni rezultatov</string>
   <!--arrays.xml-->
   <string name="arrays__use_default">Uporabi prednastavljeno</string>
   <string name="arrays__use_custom">Uporabi po meri</string>
@@ -2076,6 +2100,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="preferences__appearance">Izgled</string>
   <string name="preferences__theme">Tema</string>
   <string name="preferences__chat_wallpaper">Ozadje pogovora</string>
+  <string name="preferences__chat_color_and_wallpaper">Barva pogovora in ozadja</string>
   <string name="preferences__disable_pin">Izklop PINa</string>
   <string name="preferences__enable_pin">Vklopi PIN</string>
   <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Z izklopom PINa boste ob ponovni prijavi v svoj račun Signal izgubili vse tam shranjene podatke, razen če prej sami ne ustvarite varnostne kopije. Brez PINa tudi ne morete vklopiti zaklepa registracije.</string>
@@ -2094,7 +2119,8 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Če izklopite poročila o ogledu, tudi sami ne boste obveščeni, ko bo prejemnik prebral vaše sporočilo.</string>
   <string name="preferences__typing_indicators">Kazalniki tipkanja</string>
   <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Če nimate vklopljenih kazalnikov tipkanja zase, tudi ne morete videti kdaj vaš partner tipka svoje sporočilo.</string>
-  <string name="preferences__request_keyboard_to_disable_personalized_learning">Zahteva tipkovnici za izklop personificiranega učenja. Ta nastavitev ne zagotavlja, da bo tipkovnica tudi upoštevala zahtevo.</string>
+  <string name="preferences__request_keyboard_to_disable">Zahteva tipkovnici za izklop personaliziranega učenja.</string>
+  <string name="preferences__this_setting_is_not_a_guarantee">Ta nastavitev ne zagotavlja, da bo tipkovnica tudi upoštevala zahtevo.</string>
   <string name="preferences_app_protection__blocked_users">Blokirani/e uporabniki/ce</string>
   <string name="preferences_chats__when_using_mobile_data">Ob uporabi mobilnega omrežja</string>
   <string name="preferences_chats__when_using_wifi">Ob uporabi omrežja Wi-Fi</string>
@@ -2134,8 +2160,8 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="preferences_data_and_storage__calls">Klici</string>
   <string name="preferences_data_and_storage__use_less_data_for_calls">Porabi manj podatkov za klice</string>
   <string name="preferences_data_and_storage__never">Nikoli</string>
-  <string name="preferences_data_and_storage__wifi_and_cellular">WiFi in mobilni podatki</string>
-  <string name="preferences_data_and_storage__cellular_only">Samo mobilni podatki</string>
+  <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi in mobilni podatki</string>
+  <string name="preferences_data_and_storage__mobile_data_only">Samo mobilni podatki</string>
   <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Poraba manj podatkov pri klicih lahko izboljša zanesljivost klicov v slabih omrežjih</string>
   <string name="preferences_notifications__messages">Sporočila</string>
   <string name="preferences_notifications__events">Dogodki</string>
@@ -2223,6 +2249,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="CreatePaymentFragment__8">8</string>
   <string name="CreatePaymentFragment__9">9</string>
   <string name="CreatePaymentFragment__0">0</string>
+  <string name="CreatePaymentFragment__backspace">Nazaj</string>
   <!--EditNoteFragment-->
   <!--ConfirmPaymentFragment-->
   <string name="ConfirmPayment__to">Naslovnik</string>
@@ -2572,7 +2599,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="NewDeviceTransferInstructions__first_bullet">1.</string>
   <string name="NewDeviceTransferInstructions__tap_on_your_profile_photo_in_the_top_left_to_open_settings">Za dostop do Nastavitev tapnite na svojo profilno fotografijo, zgoraj levo</string>
   <string name="NewDeviceTransferInstructions__second_bullet">2.</string>
-  <string name="NewDeviceTransferInstructions__tap_on_chats">Tapnite na \"Pogovori\"</string>
+  <string name="NewDeviceTransferInstructions__tap_on_account">Tapnite na \"Račun\"</string>
   <string name="NewDeviceTransferInstructions__third_bullet">3.</string>
   <string name="NewDeviceTransferInstructions__tap_transfer_account_and_then_continue_on_both_devices">Tapnite na \"Prenesi račun\" in nato \"Dalje\" na obeh napravah</string>
   <!--NewDeviceTransferSetupFragment-->
@@ -2678,7 +2705,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="RecipientBottomSheet_add_to_a_group">Dodaj v skupino</string>
   <string name="RecipientBottomSheet_add_to_another_group">Dodaj v drugo skupino</string>
   <string name="RecipientBottomSheet_view_safety_number">Pregled varnostnega števila</string>
-  <string name="RecipientBottomSheet_make_group_admin">Določi za skrbnika/co skupine</string>
+  <string name="RecipientBottomSheet_make_admin">Določi za skrbnika skupine</string>
   <string name="RecipientBottomSheet_remove_as_admin">Odstrani kot skrbnika/co</string>
   <string name="RecipientBottomSheet_remove_from_group">Odstrani iz skupine</string>
   <string name="RecipientBottomSheet_message_description">Sporočilo</string>
@@ -2782,7 +2809,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <!--ShareActivity-->
   <string name="ShareActivity__share">Deli</string>
   <string name="ShareActivity__send">Pošlji</string>
-  <string name="ShareActivity__s_comma">%1$s,</string>
+  <string name="ShareActivity__comma_s">, %1$s</string>
   <string name="ShareActivity__sharing_to_multiple_chats_is">Deljenje med večimi pogovori je možno samo za sporočila Signal</string>
   <!--MultiShareDialogs-->
   <string name="MultiShareDialogs__failed_to_send_to_some_users">Pošiljanje nekaterim uporabnikom/cam ni uspelo</string>
@@ -2792,17 +2819,25 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <!--ChatWallpaperActivity-->
   <string name="ChatWallpaperActivity__chat_wallpaper">Ozadje pogovora</string>
   <!--ChatWallpaperFragment-->
+  <string name="ChatWallpaperFragment__chat_color">Barva pogovora</string>
+  <string name="ChatWallpaperFragment__reset_chat_colors">Ponastavi barve pogovorov</string>
+  <string name="ChatWallpaperFragment__reset_chat_color">Ponastavi barvo pogovora</string>
+  <string name="ChatWallpaperFragment__reset_chat_color_question">Želite ponastaviti barvo pogovora?</string>
   <string name="ChatWallpaperFragment__set_wallpaper">Določi ozadje</string>
-  <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">Zatemnjeno ozadje pri temni témi</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper">Ponastavi ozadje</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">Želite ponastaviti ozadje za ta klepet?</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">Želite ponastaviti ozadje? To ne bo ponastavilo ozadij po meri, ki ste jih izbrali za svoje pogovore.</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers">Ponastavi vsa ozadja</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">Želite ponastaviti vsa ozadja za vse vaše pogovore, tudi tista, po meri?</string>
+  <string name="ChatWallpaperFragment__dark_mode_dims_wallpaper">Temna téma zatemni ozadje</string>
   <string name="ChatWallpaperFragment__contact_name">Ime stika</string>
   <string name="ChatWallpaperFragment__reset">Ponastavi</string>
   <string name="ChatWallpaperFragment__clear">Izbriši</string>
   <string name="ChatWallpaperFragment__wallpaper_preview_description">Predogled ozadja</string>
+  <string name="ChatWallpaperFragment__would_you_like_to_override_all_chat_colors">Želite povoziti vse barve pogovorov?</string>
+  <string name="ChatWallpaperFragment__would_you_like_to_override_all_wallpapers">Želite povoziti vsa ozadja?</string>
+  <string name="ChatWallpaperFragment__reset_default_colors">Ponastavi privzete barve</string>
+  <string name="ChatWallpaperFragment__reset_all_colors">Ponastavi vse barve</string>
+  <string name="ChatWallpaperFragment__reset_default_wallpaper">Ponastavi privzeto ozadje</string>
+  <string name="ChatWallpaperFragment__reset_all_wallpapers">Ponastavi vsa ozadja</string>
+  <string name="ChatWallpaperFragment__reset_wallpapers">Ponastavi ozadja</string>
+  <string name="ChatWallpaperFragment__reset_wallpaper">Ponastavi ozadje</string>
+  <string name="ChatWallpaperFragment__reset_wallpaper_question">Ponastavim ozadje?</string>
   <!--ChatWallpaperSelectionFragment-->
   <string name="ChatWallpaperSelectionFragment__choose_from_photos">Izberi izmed fotografij</string>
   <string name="ChatWallpaperSelectionFragment__presets">Prednastavljeni</string>
@@ -2831,6 +2866,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <!--PaymentsRecoveryPhraseFragment-->
   <string name="PaymentsRecoveryPhraseFragment__next">Naprej</string>
   <string name="PaymentsRecoveryPhraseFragment__edit">Uredi</string>
+  <string name="PaymentsRecoveryPhraseFragment__previous">Nazaj</string>
   <string name="PaymentsRecoveryPhraseFragment__copy">Kopiraj</string>
   <!--PaymentsRecoveryPhraseConfirmFragment-->
   <string name="PaymentRecoveryPhraseConfirmFragment__done">OK</string>
@@ -2842,5 +2878,191 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <!--UnreadPayments-->
   <!--CanNotSendPaymentDialog-->
   <string name="CanNotSendPaymentDialog__send_a_message">Pošlji sporočilo</string>
+  <!--GroupsInCommonMessageRequest-->
+  <string name="GroupsInCommonMessageRequest__you_have_no_groups_in_common_with_this_person">S to osebo nimate nobene skupne skupine. Preverite zahtevke, da se izognete nezaželjenim spoločilom.</string>
+  <string name="GroupsInCommonMessageRequest__none_of_your_contacts_or_people_you_chat_with_are_in_this_group">V tej skupini ni nikogar iz vašega imenika ali ljudi s katerimi si pošiljate sporočila. Pred potrditvijo dobro preverite prošnje, da se izognete neželeni pošti.</string>
+  <string name="GroupsInCommonMessageRequest__about_message_requests">O prošnjah za pogovor</string>
+  <string name="GroupsInCommonMessageRequest__okay">Okej</string>
+  <string name="ChatColorSelectionFragment__heres_a_preview_of_the_chat_color">Tu je predogled barve pogovora.</string>
+  <string name="ChatColorSelectionFragment__the_color_is_visible_to_only_you">Barva je vidna samo vam.</string>
+  <!--GroupDescriptionDialog-->
+  <string name="GroupDescriptionDialog__group_description">Opis skupine</string>
+  <!--QualitySelectorBottomSheetDialog-->
+  <string name="QualitySelectorBottomSheetDialog__standard">Standardna</string>
+  <string name="QualitySelectorBottomSheetDialog__faster_less_data">Hitreje, manj podatkov</string>
+  <string name="QualitySelectorBottomSheetDialog__high">Visoka</string>
+  <string name="QualitySelectorBottomSheetDialog__slower_more_data">Počasneje, več podatkov</string>
+  <string name="QualitySelectorBottomSheetDialog__photo_quality">Kvaliteta fotografije</string>
+  <!--AppSettingsFragment-->
+  <string name="AppSettingsFragment__invite_your_friends">Povabi svoje prijatelje/ice</string>
+  <!--AccountSettingsFragment-->
+  <string name="AccountSettingsFragment__account">Račun</string>
+  <string name="AccountSettingsFragment__youll_be_asked_less_frequently">Sčasoma boste opozorjeni manjkrat</string>
+  <string name="AccountSettingsFragment__require_your_signal_pin">Zahteva za vnos PIN kode Signal za ponovno prijavo vaše telefonske številke v sistem Signal.</string>
+  <!--ChatsSettingsFragment-->
+  <string name="ChatsSettingsFragment__keyboard">Tipkovnica</string>
+  <string name="ChatsSettingsFragment__enter_key_sends">Tipka \'Naprej\' pošlje</string>
+  <!--SmsSettingsFragment-->
+  <string name="SmsSettingsFragment__use_as_default_sms_app">Uporabljaj kot privzeto aplikacijo SMS</string>
+  <!--NotificationsSettingsFragment-->
+  <string name="NotificationsSettingsFragment__messages">Sporočila</string>
+  <string name="NotificationsSettingsFragment__calls">Klici</string>
+  <string name="NotificationsSettingsFragment__notify_when">Obvesti me ko …</string>
+  <string name="NotificationsSettingsFragment__contact_joins_signal">Se oseba iz imenika pridruži Signalu</string>
+  <!--PrivacySettingsFragment-->
+  <string name="PrivacySettingsFragment__blocked">Blokirano</string>
+  <string name="PrivacySettingsFragment__d_contacts">%1$d stikov</string>
+  <string name="PrivacySettingsFragment__messaging">Sporočanje</string>
+  <string name="PrivacySettingsFragment__disappearing_messages">Izginjajoča sporočila</string>
+  <string name="PrivacySettingsFragment__app_security">Varnost aplikacije</string>
+  <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Prepreči zajem slike zaslona</string>
+  <string name="PrivacySettingsFragment__signal_message_and_calls">Sporočila in klici Signal, posredovanje klicev in zakriti pošiljatelj</string>
+  <string name="PrivacySettingsFragment__default_timer_for_new_changes">Privzet odštevalnik za nove pogovore</string>
+  <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Nastavite privzet čas poteka sporočil za vse nove pogovore, ki jih začnete sami.</string>
+  <!--AdvancedPrivacySettingsFragment-->
+  <string name="AdvancedPrivacySettingsFragment__show_status_icon">Prikaži statusno ikono</string>
+  <string name="AdvancedPrivacySettingsFragment__show_an_icon">Prikaz ikone v detajlih sporočil kadar so ta dostavljena s pomočjo zakritega pošiljatelja.</string>
+  <!--ExpireTimerSettingsFragment-->
+  <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Nova sporočila, poslana in prejeta v novih pogovorih, ki ste jih pričeli sami, bodo izginila, ko bodo videna s strani prejemnika.</string>
+  <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Nova sporočila, poslana in prejeta v tem pogovoru bodo izginila, ko bodo videna s strani prejemnika.</string>
+  <string name="ExpireTimerSettingsFragment__off">Izklopljena</string>
+  <string name="ExpireTimerSettingsFragment__4_weeks">4 tedne</string>
+  <string name="ExpireTimerSettingsFragment__1_week">1 teden</string>
+  <string name="ExpireTimerSettingsFragment__1_day">1 dan</string>
+  <string name="ExpireTimerSettingsFragment__8_hours">8 ur</string>
+  <string name="ExpireTimerSettingsFragment__1_hour">1 ura</string>
+  <string name="ExpireTimerSettingsFragment__5_minutes">5 minut</string>
+  <string name="ExpireTimerSettingsFragment__30_seconds">30 sekund</string>
+  <string name="ExpireTimerSettingsFragment__custom_time">Čas po meri</string>
+  <string name="ExpireTimerSettingsFragment__set">Nastavi</string>
+  <string name="ExpireTimerSettingsFragment__save">Shrani</string>
+  <string name="CustomExpireTimerSelectorView__seconds">sekunde</string>
+  <string name="CustomExpireTimerSelectorView__minutes">minut</string>
+  <string name="CustomExpireTimerSelectorView__hours">ur</string>
+  <string name="CustomExpireTimerSelectorView__days">dnevi</string>
+  <string name="CustomExpireTimerSelectorView__weeks">tedni</string>
+  <!--HelpSettingsFragment-->
+  <string name="HelpSettingsFragment__support_center">Center za podporo</string>
+  <string name="HelpSettingsFragment__contact_us">Kontaktirajte nas</string>
+  <string name="HelpSettingsFragment__version">Različica</string>
+  <string name="HelpSettingsFragment__debug_log">Sistemska zabeležba</string>
+  <string name="HelpSettingsFragment__terms_amp_privacy_policy">Pogoji &amp; politika zasebnosti</string>
+  <string name="HelpFragment__copyright_signal_messenger">Vse pravice Signal Messenger</string>
+  <string name="HelpFragment__licenced_under_the_gplv3">Pod licenco GPLv3</string>
+  <!--DataAndStorageSettingsFragment-->
+  <string name="DataAndStorageSettingsFragment__calls">Klici</string>
+  <!--ChatColorSelectionFragment-->
+  <string name="ChatColorSelectionFragment__auto">Avtomatično</string>
+  <string name="ChatColorSelectionFragment__use_custom_colors">Uporabi barve po meri</string>
+  <string name="ChatColorSelectionFragment__chat_color">Barva pogovora</string>
+  <string name="ChatColorSelectionFragment__edit">Uredi</string>
+  <string name="ChatColorSelectionFragment__duplicate">Podvoji</string>
+  <string name="ChatColorSelectionFragment__delete">Izbriši</string>
+  <string name="ChatColorSelectionFragment__delete_color">Izbriši barvo</string>
+  <plurals name="ChatColorSelectionFragment__this_custom_color_is_used">
+    <item quantity="one">Ta barva po meri je uporabljena v %1$d pogovoru. Jo želite izbrisati?</item>
+    <item quantity="two">Ta barva po meri je uporabljena v %1$d pogovorih. Jo želite izbrisati za oba pogovora?</item>
+    <item quantity="few">Ta barva po meri je uporabljena v %1$d pogovorih. Jo želite izbrisati za vse pogovore?</item>
+    <item quantity="other">Ta barva po meri je uporabljena v %1$d pogovorih. Jo želite izbrisati za vse pogovore?</item>
+  </plurals>
+  <string name="ChatColorSelectionFragment__delete_chat_color">Želite izbrisati barvo pogovora?</string>
+  <!--CustomChatColorCreatorFragment-->
+  <string name="CustomChatColorCreatorFragment__solid">Enotna</string>
+  <string name="CustomChatColorCreatorFragment__gradient">Prelivajoča</string>
+  <string name="CustomChatColorCreatorFragment__hue">Odtenek</string>
+  <string name="CustomChatColorCreatorFragment__saturation">Barvna nasičenost</string>
+  <!--CustomChatColorCreatorFragmentPage-->
+  <string name="CustomChatColorCreatorFragmentPage__save">Shrani</string>
+  <string name="CustomChatColorCreatorFragmentPage__edit_color">Uredi barvo</string>
+  <plurals name="CustomChatColorCreatorFragmentPage__this_color_is_used">
+    <item quantity="one">Ta barva po meri je uporabljena v %1$d pogovoru. Ali želite shraniti spremembe?</item>
+    <item quantity="two">Ta barva po meri je uporabljena v %1$d pogovorih. Ali želite shraniti spremembe za oba pogovora?</item>
+    <item quantity="few">Ta barva po meri je uporabljena v %1$d pogovorih. Ali želite shraniti spremembe za vse pogovore?</item>
+    <item quantity="other">Ta barva po meri je uporabljena v %1$d pogovorih. Ali želite shraniti spremembe za vse pogovore?</item>
+  </plurals>
+  <!--ChatColorGradientTool-->
+  <string name="ChatColorGradientTool_top_edge_selector">Gornji rob</string>
+  <string name="ChatColorGradientTool_bottom_edge_selector">Spodnji rob</string>
+  <!--EditReactionsFragment-->
+  <string name="EditReactionsFragment__customize_reactions">Prilagodi reakcije</string>
+  <string name="EditReactionsFragment__tap_to_replace_an_emoji">Tapnite za zamenjavo emojija</string>
+  <string name="EditReactionsFragment__reset">Ponastavi</string>
+  <string name="EditReactionsFragment_save">Shrani</string>
+  <string name="ChatColorSelectionFragment__auto_matches_the_color_to_the_wallpaper">Barva se prilagaja ozadju</string>
+  <string name="CustomChatColorCreatorFragment__drag_to_change_the_direction_of_the_gradient">Potegnite za spremembo smeri preliva</string>
+  <!--ChatColorsMegaphone-->
+  <string name="ChatColorsMegaphone__new_chat_colors">Nove barve pogovorov</string>
+  <string name="ChatColorsMegaphone__we_switched_up_chat_colors">Spremenili smo barve pogovorov, da bodo ti bolj berljivi in je na razpolago več opcij.</string>
+  <string name="ChatColorsMegaphone__appearance">Izgled</string>
+  <string name="ChatColorsMegaphone__not_now">Ne zdaj</string>
+  <!--KeyboardPagerFragment-->
+  <string name="KeyboardPagerFragment_emoji">Emoji</string>
+  <string name="KeyboardPagerFragment_open_emoji_search">Odpri iskanje po emojijih</string>
+  <string name="KeyboardPagerFragment_open_sticker_search">Odpri iskanje po nalepkah</string>
+  <string name="KeyboardPagerFragment_open_gif_search">Odpri iskanje po GIF-ih</string>
+  <string name="KeyboardPagerFragment_stickers">Nalepke</string>
+  <string name="KeyboardPagerFragment_backspace">Nazaj</string>
+  <string name="KeyboardPagerFragment_gifs">GIF-i</string>
+  <string name="KeyboardPagerFragment_search_emoji">Iskanje po emojijih</string>
+  <string name="KeyboardPagerfragment_back_to_emoji">Nazaj k emojijem</string>
+  <string name="KeyboardPagerfragment_clear_search_entry">Počisti iskalno polje</string>
+  <string name="KeyboardPagerFragment_search_giphy">Iskanje po GIPHY-ju</string>
+  <!--StickerSearchDialogFragment-->
+  <string name="StickerSearchDialogFragment_search_stickers">Iskanje med nalepkami</string>
+  <string name="StickerSearchDialogFragment_no_results_found">Ni rezultatov</string>
+  <string name="EmojiSearchFragment__no_results_found">Ni rezultatov</string>
+  <string name="NotificationsSettingsFragment__unknown_ringtone">Neznano zvonenje</string>
+  <!--ConversationSettingsFragment-->
+  <string name="ConversationSettingsFragment__send_message">Pošlji sporočilo</string>
+  <string name="ConversationSettingsFragment__start_video_call">Začni video klic</string>
+  <string name="ConversationSettingsFragment__start_audio_call">Začni zvočni klic</string>
+  <string name="ConversationSettingsFragment__message">Sporočilo</string>
+  <string name="ConversationSettingsFragment__video">Video</string>
+  <string name="ConversationSettingsFragment__audio">Zvok</string>
+  <string name="ConversationSettingsFragment__call">Kliči</string>
+  <string name="ConversationSettingsFragment__mute">Utišaj</string>
+  <string name="ConversationSettingsFragment__muted">Utišan</string>
+  <string name="ConversationSettingsFragment__search">Iskanje</string>
+  <string name="ConversationSettingsFragment__disappearing_messages">Izginjajoča sporočila</string>
+  <string name="ConversationSettingsFragment__sounds_and_notifications">Zvoki &amp; obvestila</string>
+  <string name="ConversationSettingsFragment__contact_details">Podrobnosti o stiku</string>
+  <string name="ConversationSettingsFragment__view_safety_number">Pregled varnostnega števila</string>
+  <string name="ConversationSettingsFragment__block">Blokiraj</string>
+  <string name="ConversationSettingsFragment__block_group">Blokiraj skupino</string>
+  <string name="ConversationSettingsFragment__unblock">Odblokiraj</string>
+  <string name="ConversationSettingsFragment__unblock_group">Odblokiraj skupino</string>
+  <string name="ConversationSettingsFragment__add_to_a_group">Dodaj v skupino</string>
+  <string name="ConversationSettingsFragment__see_all">Prikaz vseh</string>
+  <string name="ConversationSettingsFragment__add_members">Dodaj člane/ice</string>
+  <string name="ConversationSettingsFragment__permissions">Dovoljenja</string>
+  <string name="ConversationSettingsFragment__requests_and_invites">Prošnje &amp; vabila</string>
+  <string name="ConversationSettingsFragment__group_link">Povezava do skupine</string>
+  <string name="ConversationSettingsFragment__add_as_a_contact">Dodaj kot stik</string>
+  <string name="ConversationSettingsFragment__unmute">Prekini utišanje</string>
+  <string name="ConversationSettingsFragment__conversation_muted_until_s">Pogovor utišan do %1$s</string>
+  <string name="ConversationSettingsFragment__conversation_muted_forever">Pogovor utišan za vedno</string>
+  <string name="ConversationSettingsFragment__phone_number">Telefonska številka</string>
+  <!--PermissionsSettingsFragment-->
+  <string name="PermissionsSettingsFragment__add_members">Dodaj člane/ice</string>
+  <string name="PermissionsSettingsFragment__edit_group_info">Urejanje podatkov o skupini</string>
+  <string name="PermissionsSettingsFragment__all_members">Vsi člani</string>
+  <string name="PermissionsSettingsFragment__only_admins">Samo skrbniki/ce</string>
+  <string name="PermissionsSettingsFragment__who_can_add_new_members">Kdo lahko dodaja nove člane?</string>
+  <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">Kdo lahko ureja informacije o skupini</string>
+  <!--SoundsAndNotificationsSettingsFragment-->
+  <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Izklopi obvestila</string>
+  <string name="SoundsAndNotificationsSettingsFragment__not_muted">Neutišan</string>
+  <string name="SoundsAndNotificationsSettingsFragment__muted_until_s">Utišan do %1$s</string>
+  <string name="SoundsAndNotificationsSettingsFragment__mentions">Omembe</string>
+  <string name="SoundsAndNotificationsSettingsFragment__always_notify">Vedno obveščaj</string>
+  <string name="SoundsAndNotificationsSettingsFragment__do_not_notify">Ne obveščaj</string>
+  <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">Obvestila po meri</string>
+  <!--StickerKeyboard-->
+  <!--PlaybackSpeedToggleTextView-->
+  <string name="PlaybackSpeedToggleTextView__p5x">.5x</string>
+  <string name="PlaybackSpeedToggleTextView__1x">1x</string>
+  <string name="PlaybackSpeedToggleTextView__2x">2x</string>
+  <!--VoiceNotePlayerView-->
+  <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
   <!--EOF-->
 </resources>

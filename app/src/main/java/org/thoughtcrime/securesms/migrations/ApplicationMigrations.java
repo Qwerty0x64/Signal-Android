@@ -40,8 +40,6 @@ public class ApplicationMigrations {
 
   private static final int LEGACY_CANONICAL_VERSION = 455;
 
-  public static final int CURRENT_VERSION = 32;
-
   private static final class Version {
     static final int LEGACY                 = 1;
     static final int RECIPIENT_ID           = 2;
@@ -74,7 +72,15 @@ public class ApplicationMigrations {
     // Versions 29, 30 accidentally skipped
     static final int MUTE_SYNC              = 31;
     static final int PROFILE_SHARING_UPDATE = 32;
+    static final int SMS_STORAGE_SYNC       = 33;
+    static final int APPLY_UNIVERSAL_EXPIRE = 34;
+    static final int SENDER_KEY             = 35;
+    static final int SENDER_KEY_2           = 36;
+    static final int DB_AUTOINCREMENT       = 37;
+    static final int ATTACHMENT_CLEANUP     = 38;
   }
+
+  public static final int CURRENT_VERSION = 38;
 
   /**
    * This *must* be called after the {@link JobManager} has been instantiated, but *before* the call
@@ -310,6 +316,30 @@ public class ApplicationMigrations {
 
     if (lastSeenVersion < Version.PROFILE_SHARING_UPDATE) {
       jobs.put(Version.PROFILE_SHARING_UPDATE, new ProfileSharingUpdateMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.SMS_STORAGE_SYNC) {
+      jobs.put(Version.SMS_STORAGE_SYNC, new AccountRecordMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.APPLY_UNIVERSAL_EXPIRE) {
+      jobs.put(Version.APPLY_UNIVERSAL_EXPIRE, new ApplyUnknownFieldsToSelfMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.SENDER_KEY) {
+      jobs.put(Version.SENDER_KEY, new AttributesMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.SENDER_KEY_2) {
+      jobs.put(Version.SENDER_KEY_2, new AttributesMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.DB_AUTOINCREMENT) {
+      jobs.put(Version.DB_AUTOINCREMENT, new DatabaseMigrationJob());
+    }
+
+    if (lastSeenVersion < Version.ATTACHMENT_CLEANUP) {
+      jobs.put(Version.ATTACHMENT_CLEANUP, new AttachmentCleanupMigrationJob());
     }
 
     return jobs;

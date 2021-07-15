@@ -2,7 +2,6 @@ package org.thoughtcrime.securesms.messagedetails;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -13,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.thoughtcrime.securesms.PassphraseRequiredActivity;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.color.MaterialColor;
+import org.thoughtcrime.securesms.conversation.colors.Colorizer;
+import org.thoughtcrime.securesms.conversation.colors.ColorizerView;
+import org.thoughtcrime.securesms.conversation.ui.error.SafetyNumberChangeDialog;
 import org.thoughtcrime.securesms.database.MmsSmsDatabase;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackController;
@@ -24,9 +25,7 @@ import org.thoughtcrime.securesms.messagedetails.MessageDetailsViewModel.Factory
 import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.recipients.RecipientId;
-import org.thoughtcrime.securesms.util.DynamicDarkActionBarTheme;
 import org.thoughtcrime.securesms.util.DynamicTheme;
-import org.thoughtcrime.securesms.util.WindowUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +41,7 @@ public final class MessageDetailsActivity extends PassphraseRequiredActivity {
   private GlideRequests           glideRequests;
   private MessageDetailsViewModel viewModel;
   private MessageDetailsAdapter   adapter;
+  private Colorizer               colorizer;
 
   private DynamicTheme dynamicTheme = new DynamicTheme();
 
@@ -95,11 +95,15 @@ public final class MessageDetailsActivity extends PassphraseRequiredActivity {
   }
 
   private void initializeList() {
-    RecyclerView list = findViewById(R.id.message_details_list);
-    adapter           = new MessageDetailsAdapter(this, glideRequests);
+    RecyclerView  list          = findViewById(R.id.message_details_list);
+    ColorizerView colorizerView = findViewById(R.id.message_details_colorizer);
+
+    colorizer = new Colorizer(colorizerView);
+    adapter   = new MessageDetailsAdapter(this, glideRequests, colorizer, this::onErrorClicked);
 
     list.setAdapter(adapter);
     list.setItemAnimator(null);
+    colorizer.attachToRecyclerView(list);
   }
 
   private void initializeViewModel() {
@@ -116,6 +120,7 @@ public final class MessageDetailsActivity extends PassphraseRequiredActivity {
         adapter.submitList(convertToRows(details));
       }
     });
+    viewModel.getRecipient().observe(this, recipient -> colorizer.onChatColorsChanged(recipient.getChatColors()));
   }
 
   private void initializeVideoPlayer() {
@@ -139,6 +144,7 @@ public final class MessageDetailsActivity extends PassphraseRequiredActivity {
 
     if (details.getConversationMessage().getMessageRecord().isOutgoing()) {
       addRecipients(list, RecipientHeader.NOT_SENT, details.getNotSent());
+      addRecipients(list, RecipientHeader.VIEWED, details.getViewed());
       addRecipients(list, RecipientHeader.READ, details.getRead());
       addRecipients(list, RecipientHeader.DELIVERED, details.getDelivered());
       addRecipients(list, RecipientHeader.SENT_TO, details.getSent());
@@ -160,5 +166,9 @@ public final class MessageDetailsActivity extends PassphraseRequiredActivity {
       list.add(new MessageDetailsViewState<>(status, MessageDetailsViewState.RECIPIENT));
     }
     return true;
+  }
+
+  private void onErrorClicked(@NonNull MessageRecord messageRecord) {
+    SafetyNumberChangeDialog.show(this, messageRecord);
   }
 }

@@ -3,18 +3,17 @@ package org.thoughtcrime.securesms.jobs;
 import androidx.annotation.NonNull;
 
 import org.signal.core.util.logging.Log;
-import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.crypto.UnidentifiedAccessUtil;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.MessageDatabase;
 import org.thoughtcrime.securesms.database.MessageDatabase.SyncMessageId;
 import org.thoughtcrime.securesms.database.NoSuchMessageException;
 import org.thoughtcrime.securesms.database.RecipientDatabase.UnidentifiedAccessMode;
+import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.SmsMessageRecord;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.jobmanager.Data;
 import org.thoughtcrime.securesms.jobmanager.Job;
-import org.thoughtcrime.securesms.jobmanager.impl.BackoffUtil;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
@@ -26,17 +25,18 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
+import org.whispersystems.signalservice.api.crypto.ContentHint;
 import org.whispersystems.signalservice.api.crypto.UnidentifiedAccessPair;
 import org.whispersystems.signalservice.api.crypto.UntrustedIdentityException;
+import org.whispersystems.signalservice.api.messages.SendMessageResult;
 import org.whispersystems.signalservice.api.messages.SignalServiceDataMessage;
 import org.whispersystems.signalservice.api.messages.multidevice.SignalServiceSyncMessage;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
-import org.whispersystems.signalservice.api.push.exceptions.NonSuccessfulResponseCodeException;
+import org.whispersystems.signalservice.api.push.exceptions.ProofRequiredException;
 import org.whispersystems.signalservice.api.push.exceptions.ServerRejectedException;
 import org.whispersystems.signalservice.api.push.exceptions.UnregisteredUserException;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class PushTextSendJob extends PushSendJob {
 
@@ -73,7 +73,7 @@ public class PushTextSendJob extends PushSendJob {
   }
 
   @Override
-  public void onPushSend() throws IOException, NoSuchMessageException, UndeliverableMessageException {
+  public void onPushSend() throws IOException, NoSuchMessageException, UndeliverableMessageException, RetryLaterException {
     ExpiringMessageManager expirationManager = ApplicationDependencies.getExpiringMessageManager();
     MessageDatabase        database          = DatabaseFactory.getSmsDatabase(context);
     SmsMessageRecord       record            = database.getSmsMessage(messageId);
@@ -133,6 +133,8 @@ public class PushTextSendJob extends PushSendJob {
       database.markAsSentFailed(record.getId());
       database.markAsPush(record.getId());
       RetrieveProfileJob.enqueue(recipientId);
+    } catch (ProofRequiredException e) {
+      handleProofRequiredException(e, record.getRecipient(), record.getThreadId(), messageId, false);
     }
   }
 
@@ -174,10 +176,13 @@ public class PushTextSendJob extends PushSendJob {
         Optional<UnidentifiedAccessPair> syncAccess  = UnidentifiedAccessUtil.getAccessForSync(context);
         SignalServiceSyncMessage         syncMessage = buildSelfSendSyncMessage(context, textSecureMessage, syncAccess);
 
-        messageSender.sendMessage(syncMessage, syncAccess);
+        SendMessageResult result = messageSender.sendSyncMessage(syncMessage, syncAccess);
+        DatabaseFactory.getMessageLogDatabase(context).insertIfPossible(messageRecipient.getId(), message.getDateSent(), result, ContentHint.RESENDABLE, new MessageId(messageId, false));
         return syncAccess.isPresent();
       } else {
-        return messageSender.sendMessage(address, unidentifiedAccess, textSecureMessage).getSuccess().isUnidentified();
+        SendMessageResult result = messageSender.sendDataMessage(address, unidentifiedAccess, ContentHint.RESENDABLE, textSecureMessage);
+        DatabaseFactory.getMessageLogDatabase(context).insertIfPossible(messageRecipient.getId(), message.getDateSent(), result, ContentHint.RESENDABLE, new MessageId(messageId, false));
+        return result.getSuccess().isUnidentified();
       }
     } catch (UnregisteredUserException e) {
       warn(TAG, "Failure", e);
@@ -185,6 +190,10 @@ public class PushTextSendJob extends PushSendJob {
     } catch (ServerRejectedException e) {
       throw new UndeliverableMessageException(e);
     }
+  }
+
+  public static long getMessageId(@NonNull Data data) {
+    return data.getLong(KEY_MESSAGE_ID);
   }
 
   public static class Factory implements Job.Factory<PushTextSendJob> {
